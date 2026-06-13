@@ -1,0 +1,75 @@
+# =========================================================================================
+# SCRIPT ÚNICO DE DESCARGA DOCUMENTAL - SSOT PARTE 1 DE 4
+# EJECUTAR EN LA TERMINAL DE POWERSHELL EN VS CODE (E:\ZAPAPP)
+# =========================================================================================
+
+$ErrorActionPreference = "Stop"
+
+# 1. Definición estricta de rutas locales de destino
+$CarpetaDestino = "E:\ZAPAPP\documentacion_ssot"
+$ArchivoDestino = Join-Path $CarpetaDestino "SSOT_PARTE_1_MARCO_Y_ALCANCE.md"
+
+# 2. Asegurar que la estructura de carpetas exista en el disco duro
+if (-not (Test-Path $CarpetaDestino)) {
+    Write-Host "📁 Creando carpeta local para el SSOT verbal en: $CarpetaDestino" -ForegroundColor Yellow
+    New-Item -ItemType Directory -Path $CarpetaDestino | Out-Null
+}
+
+# 3. Contenido verbal y narrativo explícito (Sin una sola línea de código de programación)
+$ContenidoVerbal = @"
+# FUENTE ÚNICA DE VERDAD (SSOT) - SHOEMANAGER (ZAPAPP)
+## PARTE 1: MARCO FILOSÓFICO, DEFINICIONES OPERATIVAS Y ALCANCE FUNCIONAL DETALLADO
+
+### 1. INTRODUCCIÓN GENERAL DEL SISTEMA
+El presente documento constituye la Fuente Única de Verdad (SSOT) definitiva para el sistema de gestión interna denominado ShoeManager (ZAPAPP). Este sistema surge como una solución tecnológica cerrada de uso exclusivo para un único operador y vendedor, cuyo modelo de negocio se basa en la comercialización masiva y rápida de liquidaciones y saldos de calzado deportivo (zapatillas) hasta agotar la existencia física real disponible. 
+
+Al tratarse de saldos, el sistema se diseña bajo la premisa de que no existen reposiciones ni reabastecimientos de inventario convencionales; cada lote que ingresa al sistema es único y se extingue definitivamente al reducirse su existencia a cero unidades. La aplicación se despliega de manera simultánea en dos entornos operativos: una plataforma de escritorio para el sistema operativo Microsoft Windows y una plataforma móvil para el sistema operativo Android.
+
+### 2. FILOSOFÍA ARQUITECTÓNICA Y PRINCIPIOS DE DISEÑO
+La construcción e implementación del sistema se rige de forma obligatoria por tres pilares conceptuales que determinan todo su comportamiento lógico:
+
+* **Operación Absoluta Sin Conexión (Offline-First):** El sistema debe garantizar que el cien por ciento de las funciones de administración de inventario, registro de transacciones, análisis de mensajes y generación de reportes se ejecuten localmente en el hardware del usuario. Se prohíbe explícitamente la dependencia de servidores de bases de datos externos, conexiones activas a redes de internet para el funcionamiento diario o el almacenamiento de datos en la nube. La aplicación debe iniciar, operar y guardar cambios de manera instantánea aun en aislamiento total de red.
+* **Privacidad Total de la Información:** Ningún dato comercial, registro numérico de existencias, datos de contacto de compradores ni transcripciones de conversaciones puede ser transmitido fuera de los dispositivos físicos del vendedor. El sistema no incluye módulos de telemetría, analíticas de uso de terceros ni consultas a servicios externos. La base de datos es un archivo de texto plano local de acceso exclusivo por los módulos internos de la aplicación.
+* **Exclusión de Pasarelas y Automatizaciones de Pago:** El sistema rechaza cualquier tipo de integración con APIs de procesamiento de tarjetas de crédito o débito, pasarelas bancarias o plataformas de dinero digital. El flujo financiero del negocio se basa únicamente en la modalid de Contraentrega. Por lo tanto, las funciones de la aplicación respecto a los estados financieros son exclusivamente de registro administrativo e informativo, delegando la validación del recaudo real del dinero al control manual y presencial que realiza el vendedor de manera externa al software.
+
+### 3. GLOSARIO DE TÉRMINOS Y VOCABULARIO TÉCNICO-COMERCIAL
+* **Saldo (Entidad Zapatilla):** Registro único dentro del inventario que describe un modelo específico de calzado deportivo. Se define por sus atributos de marca, modelo, combinación de colores, precio de lista y su matriz de existencias físicas distribuidas por tallas.
+* **Código de Barras de Fábrica (UPC-A):** Secuencia numérica estándar de doce dígitos impresa originalmente por el fabricante en la etiqueta de la zapatilla o en su caja de empaque. Actúa como la llave de acceso y búsqueda prioritaria dentro del sistema.
+* **Identificador Interno (ID Cronológico):** Código alfanumérico generado de manera automática por la aplicación al momento de dar de alta un producto. Utiliza la fecha de registro combinada con un contador secuencial numérico para asegurar que cada lote de saldo mantenga una identidad única e inmutable para el control histórico, independiente de su código de barras de fábrica.
+* **Matriz de Stock por Talla:** Estructura de almacenamiento que asocia descripciones nominales de tallas (incluyendo números enteros y medios puntos para calzado americano o europeo) con valores numéricos enteros que representan la cantidad de pares físicamente disponibles.
+* **Fusión Incremental (Merge):** Proceso lógico ejecutado exclusivamente en la plataforma de Windows mediante el cual se comparan las bases de datos de la computadora y del celular conectado por cable físico. Resuelve los conflictos de datos analizando marcas de tiempo y unifica la información de manera bidireccional sin duplicar registros.
+* **Marca de Tiempo (Timestamp UTC):** Registro de fecha y hora bajo el estándar internacional extendido que el sistema estampa de manera automática e invisible cada vez que un dato es creado, modificado o actualizado.
+* **Servicio de Escucha de Notificaciones:** Componente residente en el sistema operativo Android que corre en segundo plano y posee el permiso explícito del usuario para interceptar, leer y extraer las cadenas de texto de los avisos flotantes enviados por la aplicación de mensajería WhatsApp.
+* **Pedido Pendiente de Validación:** Registro transaccional transitorio que se crea automáticamente en el sistema cuando el analizador de texto extrae datos de entrega de una conversación, pero que aún requiere que el vendedor confirme manualmente su veracidad antes de afectar el inventario comercial.
+
+### 4. ALCANCE DE LOS MÓDULOS DE APLICACIÓN
+#### 4.1 Módulo de Control de Inventarios
+Este módulo gobierna el ciclo de vida de los saldos desde su ingreso al sistema.
+* En la aplicación móvil para Android, el módulo se enfoca en la velocidad de captura: permite activar la cámara del dispositivo para leer instantáneamente el código de barras de fábrica, abrir el formulario de ingreso, capturar la fotografía frontal y la fotografía de perfil del producto, y registrar las cantidades por cada talla disponible.
+* En la aplicación para Windows Desktop, el módulo se transforma en una central de administración masiva: muestra todo el universo de saldos en una cuadrícula de datos de alta velocidad, permitiendo al vendedor realizar búsquedas complejas por texto, ordenar las existencias de forma ascendente o descendente, corregir precios de venta de manera global y auditar qué modelos se encuentran próximos a agotarse.
+
+#### 4.2 Módulo de Integración con Mensajería (WhatsApp Multidispositivo)
+Diseñado para asistir al vendedor en la atención al cliente sin romper el principio de base de datos local y offline. El vendedor opera su cuenta de WhatsApp de forma simultánea en la computadora y en el celular.
+* El módulo en Android actúa de manera proactiva: intercepta los mensajes entrantes y, si detecta una consulta de disponibilidad, genera una notificación interna detallando si el modelo y la talla solicitada existen en la base de datos.
+* En ambos entornos (Windows y Android), el módulo permite construir plantillas de respuesta rápidas con la información del stock actual y lanzarlas directamente hacia el chat del cliente utilizando enlaces estandarizados de comunicación interactiva con la aplicación oficial de WhatsApp.
+
+#### 4.3 Módulo de Procesamiento de Órdenes y Despacho
+Encargado de la gestión logística del negocio de saldos. Mantiene un control estricto sobre el estado de cada pedido a través de cinco fases lineales bien definidas administrativamente: desde que la orden es capturada como una propuesta, pasando por su confirmación formal (momento exacto en que se bloquean y descuentan las unidades del inventario físico), su asignación a la ruta de reparto físico, hasta su asentamiento final como una entrega exitosa con cobro contraentrega o su cancelación definitiva con el consecuente retorno de las unidades al stock disponible.
+
+#### 4.4 Módulo de Sincronización Local por Cable
+Componente inteligente de la aplicación de Windows Desktop que gestiona la unificación de los archivos de datos entre la computadora y el teléfono celular. Al activarse, permite al usuario navegar visualmente por los dispositivos conectados al equipo, seleccionar la carpeta compartida del celular y desencadenar de forma automática el algoritmo de fusión de texto e imágenes a través del cable USB, eliminando por completo la necesidad de servidores web intermediarios.
+"@
+
+# 4. Forzar la escritura limpia del archivo en el disco duro con codificación universal UTF-8
+Set-Content -Path $ArchivoDestino -Value $ContenidoVerbal -Encoding UTF8
+
+# 5. Validación visual para el usuario
+if (Test-Path $ArchivoDestino) {
+    Write-Host ""
+    Write-Host "✅ ¡DESCARGA COMPLETADA EXITOSAMENTE!" -ForegroundColor Green
+    Write-Host "📄 El archivo formal se ha guardado en: $ArchivoDestino" -ForegroundColor Cyan
+    Write-Host "🤖 Todo el contenido es verbal y descriptivo. Listo para la Parte 2." -ForegroundColor Green
+    Write-Host ""
+} else {
+    Write-Host "❌ Error crítico: No se pudo escribir el archivo documental en el disco." -ForegroundColor Red
+}

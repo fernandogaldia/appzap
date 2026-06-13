@@ -1,0 +1,99 @@
+PROCESOS DE NEGOCIO DEL SISTEMA SHOE MANAGER
+
+1. Proceso de Consulta de Talla
+
+-Inicio: Cliente envía mensaje por WhatsApp preguntando por una talla (ej. "¿talla 43?").
+
+-Detección: La app monitorea la notificación, extrae la talla y genera una alerta sonora al vendedor.
+
+-Acción del vendedor: Abre la app, filtra el catálogo por esa talla y envía el catálogo al cliente (texto con fotos opcionales).
+
+-Fin: Cliente recibe el catálogo. La app detecta si el cliente lo abre ("visto") y notifica al vendedor.
+
+2. Proceso de Pedido (Captura y Creación)
+
+-Inicio: Cliente responde al catálogo con intención de compra (palabras clave: "quiero", "comprar").
+
+-Automatización: La app responde automáticamente pidiendo nombre, dirección y forma de pago.
+
+-Extracción: Cuando el cliente proporciona los datos (en uno o varios mensajes), la app los extrae mediante regex.
+
+-Creación: Se genera un pedido en estado pendiente y se muestra al vendedor para confirmación.
+
+3. Proceso de Confirmación de Pedido y Descuento de Stock
+
+-Inicio: Vendedor revisa el pedido pendiente en la app.
+
+-Verificación: El sistema verifica el stock disponible para cada talla solicitada.
+
+-Confirmación: Vendedor presiona "Confirmar". El sistema descuenta el stock automáticamente.
+
+-Notificación: Se envía un mensaje de confirmación al cliente por WhatsApp.
+
+-Cambio de estado: Pedido pasa a confirmado.
+
+4. Proceso de Envío
+
+-Inicio: Vendedor despacha el producto físicamente.
+
+-Acción en app: Vendedor marca el pedido como "enviado".
+
+-Registro: Se guarda la fechaEnvio y el estado cambia a enviado.
+
+-Notificación: Se envía un mensaje al cliente indicando que el pedido está en camino.
+
+5. Proceso de Entrega (Cierre)
+
+-Inicio: Cliente recibe el producto.
+
+-Acción en app: Vendedor marca el pedido como "entregado".
+
+-Registro: Se guarda fechaEntrega, el estado pasa a entregado.
+
+-Historial: Se actualiza el historial del cliente (se agrega el ID del pedido a su lista).
+
+6. Proceso de Gestión de Stock
+
+-Inicio: Vendedor necesita ajustar el inventario (por reposición, corrección o venta externa).
+
+-Acción: En la pantalla de stock, edita manualmente las cantidades por talla para cada zapatilla.
+
+-Persistencia: El cambio se guarda inmediatamente en datos.json.
+
+7. Proceso de Sincronización USB (entre Android y Windows)
+
+-Inicio: Vendedor conecta el celular Android a la PC Windows por USB.
+
+-Ejecución: En la app de Windows, presiona "Sincronizar USB".
+
+-Fusión: El sistema compara los JSON de ambos dispositivos por ID y timestamp; el registro más reciente gana.
+
+-Copia de fotos: Solo se copian las fotos nuevas o con timestamp más reciente.
+
+-Actualización: Se actualizan los archivos en ambos dispositivos y se genera un reporte.
+
+8. Proceso de Exportación de Reportes
+
+-Inicio: Vendedor necesita un informe de ventas.
+
+-Selección: Elige período (día, semana, mes) y formato (Excel o CSV).
+
+-Generación: La app extrae los pedidos del período, calcula totales y productos más vendidos.
+
+-Salida: Guarda el archivo en la carpeta respaldos/ y ofrece compartirlo o abrirlo.
+
+9. Proceso de Configuración del Negocio
+
+-Horario laboral: Define horario de atención para silenciar alertas fuera de ese rango.
+
+-Zonas de envío: Lista de zonas (ej. Lima Norte, Sur) que usa para calcular costo de envío fijo.
+
+-Costo de envío fijo: Precio único para todas las zonas (configurable).
+
+-Alertas: Activar/desactivar sonido de notificaciones.
+
+10. Proceso de Respaldo y Recuperación (Manual)
+
+-Exportar respaldo: Vendedor puede guardar una copia de datos.json y fotos en un archivo ZIP.
+
+-Importar respaldo: Puede restaurar desde un ZIP anterior (reemplazando o fusionando datos).

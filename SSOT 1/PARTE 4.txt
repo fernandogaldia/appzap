@@ -1,0 +1,79 @@
+# =========================================================================================
+# SCRIPT ÚNICO DE DESCARGA DOCUMENTAL - SSOT PARTE 4 DE 4
+# EJECUTAR EN LA TERMINAL DE POWERSHELL EN VS CODE (E:\ZAPAPP)
+# =========================================================================================
+
+$ErrorActionPreference = "Stop"
+
+# 1. Definición estricta de rutas locales de destino
+$CarpetaDestino = "E:\ZAPAPP\documentacion_ssot"
+$ArchivoDestino = Join-Path $CarpetaDestino "SSOT_PARTE_4_LOGISTICA_Y_FINANZAS.md"
+
+# 2. Asegurar que la estructura de carpetas exista en el disco duro
+if (-not (Test-Path $CarpetaDestino)) {
+    New-Item -ItemType Directory -Path $CarpetaDestino | Out-Null
+}
+
+# 3. Contenido verbal y narrativo explícito (Sin líneas de código de programación, variables ni funciones)
+$ContenidoVerbal = @"
+# FUENTE ÚNICA DE VERDAD (SSOT) - SHOEMANAGER (ZAPAPP)
+## PARTE 4: CICLO DE VIDA DE PEDIDOS, LOGÍSTICA CONTRAENTREGA Y LIQUIDACIÓN ADMINISTRATIVA
+
+### 1. FLUJO DETALLADO Y ESTADOS DEL CICLO DE VIDA DE LAS ÓRDENES
+El núcleo logístico de la aplicación se rige por una máquina de estados lineales e irreversibles en el sentido transaccional ordinario. Cada orden iniciada por el vendedor debe transitar de manera obligatoria por un camino administrativo que asegura que el inventario físico y las cuentas de recaudación sigan siendo precisas.
+
+#### 1.1 Estado de Propuesta Pendiente (Fase de Captura)
+* **Descripción Operativa:** Es el punto de partida del flujo. Se origina de forma automática cuando el analizador del chat de WhatsApp extrae datos presuntivos de dirección y calzado, o cuando el vendedor rellena manualmente el formulario inicial en movilidad.
+* **Impacto en Inventario:** En esta fase, el pedido es meramente informativo. No altera, bloquea ni disminuye las unidades de la matriz de stock por tallas. Las zapatillas siguen estando disponibles para ser añadidas a otros catálogos rápidos.
+
+#### 1.2 Estado de Orden Confirmada (Fase de Reserva de Existencias)
+* **Descripción Operativa:** El vendedor verifica los datos con el cliente a través de WhatsApp y valida que la dirección sea correcta. Al presionar el botón de confirmación en la interfaz, el pedido cambia formalmente a este estado.
+* **Impacto en Inventario:** El sistema ejecuta un descuento inmediato y obligatorio en las existencias físicas de la talla seleccionada dentro de la base de datos local. Las unidades se restan del stock comercial disponible para evitar que un mismo par sea ofrecido o vendido a otro comprador.
+
+#### 1.3 Estado de Pedido en Ruta (Fase de Distribución Física)
+* **Descripción Operativa:** El paquete es entregado al repartidor o cargado por el propio vendedor para el inicio de la jornada de distribución. El estado se actualiza para indicar que el producto ya no se encuentra físicamente en el almacén central.
+* **Impacto en Inventario:** Las existencias permanecen descontadas de la base de datos. Administrativamente, el pedido se marca en un estado intermedio que impide modificaciones en los precios pactados o en los modelos seleccionados, congelando la información comercial.
+
+#### 1.4 Estado de Entrega Exitosa (Fase de Cierre Comercial)
+* **Descripción Operativa:** El repartidor entrega el calzado al comprador, este se prueba el producto y realiza el pago en efectivo o transferencia directa en la modalidad de contraentrega. El vendedor marca el pedido como finalizado con éxito.
+* **Impacto en Inventario:** El descuento aplicado en la fase de confirmación se consolida como definitivo e irreversible. El valor monetario de la transacción se suma de forma permanente al registro de ingresos acumulados del sistema.
+
+#### 1.5 Estado de Cancelación Definitiva (Fase de Retorno y Reversa)
+* **Descripción Operativa:** Ocurre si el cliente desiste de la compra antes del despacho, si no se le encuentra en el domicilio tras reiterados intentos en la franja horaria pactada, o si el calzado no le calza correctamente en el acto de entrega física.
+* **Impacto en Inventario:** El sistema ejecuta una reversa obligatoria y automática. Las unidades previamente descontadas y reservadas se reintegran a la matriz de stock por tallas del producto, volviendo a estar disponibles para la venta. El pedido se conserva en el historial con la etiqueta de cancelado para auditorías.
+
+---
+
+### 2. PROTOCOLO DE DESPACHO EN MODALIDAD CONTRAENTREGA
+Dado que la aplicación opera sin pasarelas de pago digitales, la seguridad del recaudo financiero descansa sobre el cumplimiento estricto de las reglas administrativas del despacho local:
+
+* **Validación de Datos en Pantalla:** Antes de autorizar la salida de un lote de pedidos en ruta, la aplicación de escritorio en Windows proporciona una vista de despacho consolidada. Esta vista agrupa los pedidos según las indicaciones horarias de los compradores, permitiendo al vendedor trazar un itinerario manual óptimo para disminuir los tiempos de traslado.
+* **Confirmación Manual de Recaudo:** El sistema asume que todo pedido marcado como exitoso ha sido cobrado en su totalidad según el precio pactado registrado originalmente. La aplicación no interactúa con cuentas bancarias ni billeteras electrónicas; el vendedor actúa como el auditor final que certifica que el dinero físico o virtual ingresó a su patrimonio personal antes de cambiar el estado en el software.
+
+---
+
+### 3. MÓDULO DE LIQUIDACIÓN FINANCIERA HISTÓRICA E INFORMES DE SALDOS
+El sistema incluye un componente administrativo diseñado para evaluar el rendimiento comercial y la rentabilidad de las liquidaciones de inventario sin depender de herramientas de análisis en la nube.
+
+#### 3.1 Reporte de Caja Diario y Acumulado
+* **Cálculo de Ingresos Brutos:** La aplicación procesa la colección de pedidos en la memoria local, filtrando exclusivamente los registros que habitan bajo el estado de entrega exitosa. Suma los valores de los precios pactados multiplicados por las cantidades individuales para mostrar un indicador plano del dinero total recaudado en el día o en un rango de fechas seleccionado.
+* **Métricas de Cancelación y Rechazo:** El informe calcula el porcentaje de órdenes que terminaron en el estado de cancelación definitiva frente al total de propuestas generadas. Esto le permite al vendedor medir la efectividad de sus entregas y evaluar si las referencias horarias o las zonas de reparto presentan problemas logísticos.
+
+#### 3.2 Reporte de Liquidación de Inventario (Saldos Agotados)
+* **Auditoría de Modelos Extinguidos:** Muestra una lista histórica exclusiva de aquellos identificadores internos de zapatillas cuyas existencias en todas las tallas asociadas llegaron a cero unidades de forma definitiva.
+* **Análisis de Velocidad de Venta:** El sistema compara narrativamente la marca de tiempo de alta del saldo con la marca de tiempo del último pedido exitoso vinculado a ese producto. Esto determina cuántos días le tomó al negocio agotar por completo ese lote específico, ayudando al operador a identificar qué marcas y modelos tienen una mayor rotación comercial en el mercado local.
+"@
+
+# 4. Forzar la escritura limpia del archivo en el disco duro con codificación universal UTF-8
+Set-Content -Path $ArchivoDestino -Value $ContenidoVerbal -Encoding UTF8
+
+# 5. Validación visual para el usuario
+if (Test-Path $ArchivoDestino) {
+    Write-Host ""
+    Write-Host "✅ ¡DESCARGA DE LA PARTE 4 COMPLETADA CON ÉXITO!" -ForegroundColor Green
+    Write-Host "📄 El archivo final del SSOT se ha guardado en: $ArchivoDestino" -ForegroundColor Cyan
+    Write-Host "🤖 Estructura documental consolidada al 100% en formato verbal." -ForegroundColor Green
+    Write-Host "=====================================================================" -ForegroundColor Yellow
+} else {
+    Write-Host "❌ Error crítico: No se pudo escribir el archivo de la Parte 4 en el disco." -ForegroundColor Red
+}

@@ -1,0 +1,94 @@
+# =========================================================================================
+# SCRIPT ÚNICO DE DESCARGA DOCUMENTAL - SSOT PARTE 2 DE 4
+# EJECUTAR EN LA TERMINAL DE POWERSHELL EN VS CODE (E:\ZAPAPP)
+# =========================================================================================
+
+$ErrorActionPreference = "Stop"
+
+# 1. Definición estricta de rutas locales de destino
+$CarpetaDestino = "E:\ZAPAPP\documentacion_ssot"
+$ArchivoDestino = Join-Path $CarpetaDestino "SSOT_PARTE_2_MODELO_Y_FUSION.md"
+
+# 2. Asegurar que la estructura de carpetas exista en el disco duro
+if (-not (Test-Path $CarpetaDestino)) {
+    New-Item -ItemType Directory -Path $CarpetaDestino | Out-Null
+}
+
+# 3. Contenido verbal y narrativo explícito (Sin una sola línea de código de programación o estructuras JSON)
+$ContenidoVerbal = @"
+# FUENTE ÚNICA DE VERDAD (SSOT) - SHOEMANAGER (ZAPAPP)
+## PARTE 2: MODELO DE DATOS NARRATIVO, REGISTRO DE INVENTARIO Y ALGORITMO DE FUSIÓN LOCAL
+
+### 1. DEFINICIÓN NARRATIVA Y DETALLADA DE LA BASE DE DATOS LOCAL
+El archivo central de persistencia del sistema funciona como un almacén estructurado jerárquicamente en texto plano. En lugar de tablas relacionales complejas, la información se organiza en colecciones o listas de datos lógicos, gobernados por un nodo maestro de control técnico que registra la versión del sistema, la fecha y hora de la última sincronización general y el nombre identificador del dispositivo que actuó como ordenador maestro.
+
+#### 1.1 Colección de Saldos de Calzado (Zapatillas)
+Describe detalladamente las características físicas y comerciales de cada lote de zapatillas ingresado:
+* **Identificador Interno del Producto:** Código alfanumérico que actúa como llave primaria. Se genera de forma automática uniendo el prefijo abreviado del calzado, la fecha exacta de creación del registro y un número secuencial de tres dígitos correlativos reiniciado diariamente.
+* **Código de Barras de Fábrica:** Cadena numérica de doce dígitos que almacena el estándar universal impreso por el fabricante para el escaneo o digitación rápida.
+* **Marca y Modelo:** Descripciones en texto plano. La marca se almacena siempre en letras mayúsculas fijas para estandarizar los filtros de búsqueda, mientras que el modelo registra la denominación comercial dada por el fabricante.
+* **Combinación de Colores:** Descripción de los colores principales y secundarios del calzado para diferenciar lotes con un mismo diseño base.
+* **Precio de Lista al Público:** Valor decimal exacto que representa el costo de venta en moneda nacional, configurado para no permitir valores negativos ni iguales a cero.
+* **Rutas Relativas de Imágenes:** Dos referencias textuales que apuntan al almacenamiento local de archivos del dispositivo, indicando la ubicación exacta de la fotografía de la vista frontal del calzado (obligatoria) y de la vista de perfil (opcional).
+* **Matriz de Inventario por Talla:** Conjunto de elementos asociados donde cada clave textual representa una talla física (admitiendo fracciones o decimales como medios puntos) y su valor asociado representa la cantidad entera de existencias disponibles en almacén.
+* **Marcas de Tiempo de Auditoría:** Dos registros cronológicos internos que capturan de forma automatizada e inmutable el instante exacto en que el producto fue creado en el sistema y el milisegundo preciso de su última modificación física.
+
+#### 1.2 Colección de Clientes Registrados
+Registra la información de los compradores identificados a través del canal de comunicación:
+* **Número Telefónico Primario:** Llave de acceso única del cliente, compuesta por la cadena numérica que incluye el código de marcación internacional, sin guiones, espacios ni símbolos.
+* **Nombre de Contacto:** Identificador nominal asignado de forma manual por el vendedor para personalizar el trato comercial.
+* **Dirección Física de Entrega:** Descripción detallada del domicilio, oficina o punto de encuentro acordado para el despacho, incluyendo referencias geográficas.
+* **Preferencia Horaria de Despacho:** Indicaciones textuales específicas provistas por el comprador que restringen o sugieren los momentos idóneos para recibir el paquete.
+
+#### 1.3 Colección de Pedidos y Transacciones Logísticas
+Controla el flujo de ventas e historial de movimientos del negocio:
+* **Identificador Único de la Orden:** Código correlativo generado automáticamente que combina el prefijo de transacciones, la fecha de compra y el consecuente número diario correlativo.
+* **Enlace del Comprador:** Referencia directa que conecta el pedido con el número telefónico del cliente registrado.
+* **Detalle del Contenido del Pedido:** Lista descriptiva de los productos adquiridos. Por cada calzado incluido, se registra de forma narrativa su identificador interno, la talla seleccionada, el volumen numérico de pares comprados y el precio final pactado individualmente (permitiendo registrar variaciones o rebajas otorgadas manualmente por el vendedor).
+* **Monto Total Liquidado:** Suma monetaria exacta calculada a partir del detalle de los productos multiplicados por sus cantidades, representando el dinero neto que se debe cobrar.
+* **Estado de la Orden:** Etiqueta administrativa que controla las fases del pedido. El sistema restringe este campo de manera estricta a cinco estados secuenciales fijos: propuesta pendiente, orden confirmada con reserva de stock, pedido en ruta de distribución, entrega exitosa finalizada y cancelación definitiva.
+* **Historial Cronológico de la Transacción:** Marcas de tiempo que registran el momento de apertura de la orden y el instante de cualquier alteración en sus estados de entrega.
+
+#### 1.4 Colección de Mensajes de WhatsApp Interceptados
+Almacén pasivo de texto para el análisis de requerimientos:
+* **Remitente:** Número telefónico del usuario de WhatsApp que envió el mensaje de origen.
+* **Contenido Escrito:** Texto íntegro y sin alteraciones extraído directamente de la notificación móvil.
+* **Instante de Captura:** Registro del momento cronológico exacto en que el servicio de segundo plano leyó la notificación en el celular.
+
+---
+
+### 2. REGLAS COMPLETA DE CONTROL DE EXISTENCIAS E INVENTARIO
+El comportamiento lógico del inventario responde a directrices estrictas diseñadas para preservar la coherencia entre lo que la aplicación muestra y la disponibilidad física real del saldo:
+
+* **Regla de Unicidad por Código de Fábrica (STK-01):** El sistema impide la creación paralela de dos registros de saldos diferentes con el mismo código de barras universal. Si el usuario intenta registrar una zapatilla cuyo código ya habita en la base de datos, el flujo de creación se interrumpe de inmediato. En su lugar, el sistema redirige la interfaz del usuario hacia la pantalla de edición del registro preexistente, permitiendo únicamente el incremento de unidades en la matriz de tallas o la modificación del precio.
+* **Regla de Consistencia en Tallas (STK-02):** Todo saldo dado de alta requiere obligatoriamente que al menos una de las tallas de su matriz posea una cantidad de existencias superior a cero. Las tallas deben interpretarse exclusivamente como cadenas de texto plano, neutralizando cualquier intento de alteración por redondeo matemático que ocurre comúnmente al procesar números fraccionarios en informática.
+* **Regla de Ocultamiento Dinámico y Liquidación (STK-03):** La interfaz visual que genera los catálogos rápidos para enviar a WhatsApp consulta la matriz en tiempo real. Si el valor numérico de existencias de una talla específica se reduce a cero, dicha talla se remueve de forma automática de las opciones seleccionables del catálogo. Si la totalidad de las tallas vinculadas a un producto llega a cero, el saldo se declara automáticamente como "Liquidado", ocultándose por completo de las pantallas operativas de venta diaria, pero manteniéndose intacto en el archivo interno para no dañar los reportes históricos de los pedidos previamente completados.
+
+---
+
+### 3. PROCEDIMIENTO Y ALGORITMO DE FUSIÓN INCREMENTAL POR CABLE LOCAL
+Ante las restricciones operativas de los teléfonos móviles con sistemas operativos modernos que impiden la asignación automática de una letra de unidad de disco tradicional al conectarse por USB (operando bajo el protocolo de transferencia multimedia), el sistema implementa un procedimiento de unificación de datos bidireccional coordinado desde la aplicación de escritorio en Windows mediante los siguientes pasos narrativos:
+
+#### 3.1 Etapas del Flujo de Unificación de Datos
+1. **Establecimiento del Canal Físico:** El operador enlaza el dispositivo móvil a la computadora de escritorio mediante un cable físico USB y configura manualmente los permisos del teléfono para autorizar la transferencia de archivos.
+2. **Localización Guiada del Almacenamiento:** El usuario activa la función de sincronización en la aplicación de Windows. Esta acción despliega una ventana de navegación nativa del sistema operativo que exige al operador buscar y seleccionar manualmente la carpeta del almacenamiento interno del teléfono donde reside la base de datos móvil. Esto concede al motor de Windows los accesos de lectura y escritura requeridos.
+3. **Lectura Paralela en Memoria:** La aplicación de Windows extrae de forma simultánea el contenido de su propia base de datos local (denominada Base Maestra) y el contenido de la base de datos extraída de la carpeta del teléfono (denominada Base Móvil), cargando ambas estructuras en la memoria volátil del procesador para su evaluación comparativa.
+4. **Resolución Cronológica de Conflictos Registro por Registro:** El motor de fusión recorre elemento por elemento las listas de saldos, clientes y pedidos de ambas bases de datos. Ante elementos que compartan el mismo identificador único, el sistema aplica la Regla de Conflictos Basada en Tiempo: compara las marcas de tiempo de modificación o actualización con precisión de milisegundos. El registro que posea el instante de tiempo más reciente sobreescribe por completo al registro más antiguo, independientemente de si el cambio ocurrió primero en la computadora o en el celular.
+5. **Tratamiento de Registros Huérfanos:** Si el motor encuentra un identificador que existe en la Base Móvil pero está ausente en la Base Maestra (como un calzado registrado en movilidad), lo añade directamente a la lista unificada. En sentido inverso, si un pedido fue modificado o creado en la computadora de escritorio y no figura en el teléfono, se inserta en el flujo de datos consolidado destinado al dispositivo móvil.
+6. **Escritura Atómica en Bloque:** Concluido el análisis en la memoria RAM, el sistema genera un único conjunto de datos consolidado y ejecuta dos operaciones de escritura secuenciales e inmediatas: reemplaza el archivo local de la computadora y, acto seguido, reemplaza el archivo en el almacenamiento del teléfono a través del canal del cable conectado, garantizando que ambos dispositivos terminen con copias idénticas del mismo archivo de texto plano.
+7. **Sincronización Binaria de Archivos Multimedia (Imágenes):** El motor analiza las carpetas de fotografías de ambos extremos. El sistema inspecciona los nombres de los archivos de imágenes y calcula el identificador digital único del contenido binario (huella digital criptográfica) de cada fotografía. Si se detecta un identificador digital en el teléfono que no se encuentra físicamente en la carpeta de la computadora, el archivo de imagen se transmite a través del cable hacia el disco de escritorio. Si la computadora posee fotos nuevas editadas, estas se transmiten en dirección inversa hacia el dispositivo móvil, unificando visualmente ambos entornos.
+"@
+
+# 4. Forzar la escritura limpia del archivo en el disco duro con codificación universal UTF-8
+Set-Content -Path $ArchivoDestino -Value $ContenidoVerbal -Encoding UTF8
+
+# 5. Validación visual para el usuario
+if (Test-Path $ArchivoDestino) {
+    Write-Host ""
+    Write-Host "✅ ¡DESCARGA DE LA PARTE 2 COMPLETADA!" -ForegroundColor Green
+    Write-Host "📄 El archivo se ha guardado en: $ArchivoDestino" -ForegroundColor Cyan
+    Write-Host "🤖 Todo el contenido es 100% verbal y narrativo. Listo para la Parte 3." -ForegroundColor Green
+    Write-Host ""
+} else {
+    Write-Host "❌ Error crítico: No se pudo escribir el archivo de la Parte 2 en el disco." -ForegroundColor Red
+}

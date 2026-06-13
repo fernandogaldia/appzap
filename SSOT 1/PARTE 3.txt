@@ -1,0 +1,75 @@
+# =========================================================================================
+# SCRIPT ÚNICO DE DESCARGA DOCUMENTAL - SSOT PARTE 3 DE 4
+# EJECUTAR EN LA TERMINAL DE POWERSHELL EN VS CODE (E:\ZAPAPP)
+# =========================================================================================
+
+$ErrorActionPreference = "Stop"
+
+# 1. Definición estricta de rutas locales de destino
+$CarpetaDestino = "E:\ZAPAPP\documentacion_ssot"
+$ArchivoDestino = Join-Path $CarpetaDestino "SSOT_PARTE_3_WHATSAPP_Y_EXTRACCION.md"
+
+# 2. Asegurar que la estructura de carpetas exista en el disco duro
+if (-not (Test-Path $CarpetaDestino)) {
+    New-Item -ItemType Directory -Path $CarpetaDestino | Out-Null
+}
+
+# 3. Contenido verbal y narrativo explícito (Sin una sola línea de código de programación o expresiones regulares sintácticas)
+$ContenidoVerbal = @"
+# FUENTE ÚNICA DE VERDAD (SSOT) - SHOEMANAGER (ZAPAPP)
+## PARTE 3: INTEGRACIÓN CON WHATSAPP, SERVICIO DE NOTIFICACIONES Y EXTRACCIÓN VERBAL DE DATOS
+
+### 1. ARQUITECTURA DEL SERVICIO DE INTERCEPCIÓN EN SEGUNDO PLANO (ANDROID)
+La aplicación móvil para el sistema operativo Android implementa un mecanismo de escucha pasiva que opera de manera ininterrumpida sin necesidad de que la interfaz gráfica del sistema esté visible o activa en la pantalla del teléfono. Este servicio aprovecha las capacidades del núcleo del sistema operativo para capturar alertas flotantes generadas exclusivamente por la aplicación oficial de mensajería WhatsApp.
+
+#### 1.1 Ciclo de Operación del Escuchador Pasivo
+1. **Filtro de Origen:** Cada vez que el dispositivo móvil recibe una nueva notificación, el servicio examina el paquete de origen. Si la alerta no proviene de la aplicación oficial de WhatsApp o WhatsApp Business, el evento se descarta inmediatamente sin consumir recursos de procesamiento.
+2. **Extracción de Campos Básicos:** Al confirmar el origen, el servicio extrae dos datos textuales esenciales de la notificación: el nombre o número telefónico del remitente que envía el mensaje y el cuerpo del mensaje de texto completo.
+3. **Limpieza Primaria de Cadenas:** El texto recuperado se somete a un proceso de normalización lingüística en la memoria del dispositivo. Esta fase convierte todo el texto a letras mayúsculas uniformes, elimina acentos ortográficos, remueve emoticonos o símbolos gráficos y suprime los espacios en blanco duplicados, garantizando un bloque de texto homogéneo para su posterior análisis.
+
+---
+
+### 2. ANÁLISIS DE TEXTO Y EXTRACCIÓN LOGÍSTICA DE DATOS (REGLAS LINGÜÍSTICAS)
+Una vez normalizado el mensaje, el sistema activa un motor de evaluación basado en reglas lingüísticas y diccionarios de palabras clave para identificar si el mensaje constituye una intención de compra o una consulta de disponibilidad de existencias. Este proceso reemplaza el uso de servidores o inteligencias artificiales externas, operando al cien por ciento bajo la filosofía sin conexión.
+
+#### 2.1 Identificación de Consultas de Disponibilidad (Stock)
+El motor inspecciona el mensaje buscando la coexistencia de dos elementos conceptuales: una mención de tamaño físico y una intención de consulta.
+* **Patrón de Tallas:** El sistema busca palabras clave de activación como "TALLA", "NUMERO", "CALCE" o el uso de números aislados que coincidan con el rango comercial de calzado (por ejemplo, números del treinta y cuatro al cuarenta y cinco, incluyendo sus variantes con decimales o medios puntos).
+* **Acción de Respuesta Automática:** Si el mensaje contiene un número de talla válido, el sistema realiza una consulta relacional instantánea en el archivo de datos local. Si el modelo consultado dispone de existencias, la aplicación móvil genera una notificación interna al vendedor indicando la disponibilidad para agilizar la venta.
+
+#### 2.2 Extracción Automatizada de Datos de Entrega (Dirección y Pedido)
+Para transformar un texto informal de chat en un pedido formal dentro del sistema, el motor evalúa el mensaje mediante tres criterios de aislamiento semántico:
+* **Aislamiento de la Dirección Física:** El sistema escanea el texto buscando palabras de anclaje que denotan domicilio, tales como "AVENIDA", "AV.", "CALLE", "JR.", "JIRON", "PASAJE", "PSJ.", "URBANIZACION", "URB.", "DEPARTAMENTO", "DEPTO", "CASA" o "MANZANA". Todo el bloque de texto que se encuentre a la derecha de estas palabras de anclaje se extrae y se preselecciona de forma tentativa como el destino de despacho.
+* **Aislamiento de la Identidad del Cliente:** Si el texto de la notificación contiene nombres propios precedidos por fórmulas de presentación como "MINOMBRE ES", "ME LLAMO" o "A NOMBRE DE", el sistema captura dicha sección para el formulario. En caso contrario, la aplicación adopta por defecto el nombre asignado al perfil de WhatsApp del remitente o su número telefónico.
+* **Aislamiento de Indicaciones Horarias:** El motor busca términos vinculados a franjas temporales como "MAÑANA", "TARDE", "NOCHE", "SABADO", "ENTRE LAS", "HORAS" o "A PARTIR DE". El fragmento de texto asociado se almacena directamente en el campo administrativo de referencia horaria del comprador.
+
+---
+
+### 3. FLUJO DE GENERACIÓN DE CATÁLOGOS DINÁMICOS Y RESPUESTAS RÁPIDAS
+La interacción desde la aplicación hacia el cliente se realiza sin utilizar APIs automatizadas de envío masivo (evitando riesgos de suspensión de cuentas por parte de la empresa de mensajería). El sistema actúa como un generador de enlaces interactivos que delega el envío final a la aplicación oficial de WhatsApp.
+
+#### 3.1 Construcción del Catálogo de Saldos Personalizado
+Cuando un cliente solicita ver los modelos disponibles en una talla determinada, el vendedor utiliza la función de catálogo rápido de la aplicación:
+1. **Filtrado en Tiempo Real:** El vendedor selecciona la talla solicitada en la interfaz de usuario. La aplicación consulta la base de datos local y aísla únicamente los saldos que poseen un número de existencias mayor a cero para esa talla específica.
+2. **Composición del Mensaje de Texto:** El sistema redacta de forma automática un mensaje estructurado de forma legible, que incluye un saludo inicial, la lista detallada de los modelos disponibles (especificando marca, modelo, combinación de colores y precio de lista individual en soles) y una invitación a confirmar el pedido.
+3. **Invocación mediante Enlace Estándar:** La aplicación convierte este texto estructurado en un enlace de comunicación compatible con el protocolo universal de apertura de aplicaciones de WhatsApp. Al pulsar el botón "Enviar Catálogo", el sistema operativo abre el chat del cliente y deposita el texto en la caja de entrada de WhatsApp, quedando listo para que el vendedor presione manualmente el botón de envío.
+
+#### 3.2 Flujo de Confirmación Logística por Enlace de Chat
+Una vez que el vendedor procesa un pedido en la interfaz y lo cambia al estado de "Confirmado" o "En Ruta", el sistema ofrece la opción de notificar al comprador de forma inmediata:
+* El sistema lee los datos de la orden y compone un texto informativo que detalla el identificador único del pedido, el monto neto a pagar contraentrega y una descripción de los productos que van en camino.
+* Se genera un nuevo enlace universal que abre el chat de WhatsApp del destinatario y carga el mensaje de confirmación, permitiendo al operador mantener informado al cliente en un proceso de dos clics sin salir de la estructura desconectada del software.
+"@
+
+# 4. Forzar la escritura limpia del archivo en el disco duro con codificación universal UTF-8
+Set-Content -Path $ArchivoDestino -Value $ContenidoVerbal -Encoding UTF8
+
+# 5. Validación visual para el usuario
+if (Test-Path $ArchivoDestino) {
+    Write-Host ""
+    Write-Host "✅ ¡DESCARGA DE LA PARTE 3 COMPLETADA!" -ForegroundColor Green
+    Write-Host "📄 El archivo se ha guardado en: $ArchivoDestino" -ForegroundColor Cyan
+    Write-Host "🤖 Todo el contenido es 100% verbal y narrativo. Listo para la Parte 4." -ForegroundColor Green
+    Write-Host ""
+} else {
+    Write-Host "❌ Error crítico: No se pudo escribir el archivo de la Parte 2 en el disco." -ForegroundColor Red
+}
