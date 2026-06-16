@@ -1,0 +1,63 @@
+# =========================================================================================
+# SCRIPT ÚNICO DE ESPECIFICACIÓN - CLARIFICACIÓN TECNOLÓGICA ABSOLUTA (ZAPAPP)
+# EJECUTAR EN LA TERMINAL DE POWERSHELL EN VS CODE (E:\ZAPAPP)
+# =========================================================================================
+
+$ErrorActionPreference = "Stop"
+
+# 1. Definición de rutas del entorno documental
+$CarpetaDestino = "E:\ZAPAPP\documentacion_ssot"
+$ArchivoDestino = Join-Path $CarpetaDestino "ESPECIFICACION_LENGUAJE.md"
+
+# 2. Asegurar la existencia de la carpeta contenedora
+if (-not (Test-Path $CarpetaDestino)) {
+    New-Item -ItemType Directory -Path $CarpetaDestino | Out-Null
+}
+
+# 3. Redacción formal de la exclusión de C++ y confirmación del ecosistema C#
+$ContenidoEspecificacion = @"
+# ESPECIFICACIÓN EXCLUSIVA DEL LENGUAJE DE PROGRAMACIÓN PARA ZAPAPP
+
+Este documento aclara de forma definitiva e irreversible el lenguaje de programación y las herramientas que se utilizarán para el desarrollo de ShoeManager (ZAPAPP), descartando formalmente el uso de C++ u otras tecnologías alternativas.
+
+---
+
+## 🚫 DESCARTE ABSOLUTO DE C++
+El lenguaje **C++ queda 100% descartado** del proyecto por las siguientes razones operativas:
+1. **Complejidad innecesaria en Interfaces de Usuario:** Desarrollar interfaces visuales masivas como cuadrículas de datos (DataGrids) o formularios ágiles es extremadamente complejo y lento en C++ en comparación con los frameworks modernos.
+2. **Duplicidad de código:** C++ no permite compartir el código lógico de forma nativa y directa entre una interfaz de escritorio Windows y un servicio en segundo plano de Android, lo que obligaría a reescribir la aplicación dos veces en entornos diferentes.
+3. **Gestión de archivos de texto:** La manipulación, parseo, serialización y deserialización atómica de archivos JSON locales en memoria RAM es infinitamente más limpia y segura contra fugas de memoria en lenguajes con recolector de basura automatizado.
+
+---
+
+## ✅ LO QUE SÍ VAMOS A USAR: ÚNICAMENTE C# (C-SHARP)
+El **único lenguaje de programación oficial para el 100% del proyecto es C# (C-Sharp)**, ejecutándose sobre el ecosistema moderno de **.NET 8.0**. 
+
+Todo el sistema de escritorio, la aplicación móvil y los algoritmos compartirán este mismo lenguaje, distribuyéndose exactamente de la siguiente manera dentro de VS Code:
+
+### 1. Para la Computadora (Windows Desktop)
+* **¿Qué se usa?:** `C#` + `WPF (Windows Presentation Foundation)`.
+* **Uso exacto:** Renderizado de la cuadrícula de datos para administración masiva, visualización local de reportes financieros y ejecución del algoritmo de fusión de archivos a través del cable USB.
+
+### 2. Para el Teléfono Celular (Android)
+* **¿Qué se usa?:** `C#` + `.NET MAUI para Android`.
+* **Uso exacto:** Captura rápida de calzado en movilidad con la cámara (escaneo UPC-A), almacenamiento local y el servicio permanente en segundo plano para interceptar los mensajes de texto de las notificaciones de WhatsApp.
+
+### 3. Para la Base de Datos y Persistencia Local
+* **¿Qué se usa?:** `Texto Plano (Archivos estructurados en formato JSON)`.
+* **Uso exacto:** No se usan servidores ni nubes. El archivo se lee desde el disco, se procesa en la memoria RAM con el motor nativo `System.Text.Json` de C# y se vuelve a guardar inmediatamente tras cada operación.
+"@
+
+# 4. Forzar la escritura limpia del archivo con codificación UTF-8
+Set-Content -Path $ArchivoDestino -Value $ContenidoEspecificacion -Encoding UTF8
+
+# 5. Confirmación final en pantalla
+if (Test-Path $ArchivoDestino) {
+    Write-Host ""
+    Write-Host "✅ ¡ESPECIFICACIÓN DE LENGUAJE REGISTRADA!" -ForegroundColor Green
+    Write-Host "📄 El documento se guardó en: $ArchivoDestino" -ForegroundColor Cyan
+    Write-Host "🤖 Confirmado: C++ queda fuera. Usaremos exclusivamente C# (.NET 8.0)." -ForegroundColor Green
+    Write-Host ""
+} else {
+    Write-Host "❌ Error crítico: No se pudo escribir la especificación en el disco." -ForegroundColor Red
+}

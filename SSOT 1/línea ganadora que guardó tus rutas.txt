@@ -1,0 +1,1 @@
+dotnet build ShoeManager.sln -p:AndroidSdkDirectory="$env:USERPROFILE\AppData\Local\Android\Sdk" -p:JavaSdkDirectory="C:\Program Files\Android\Android Studio\jbr"

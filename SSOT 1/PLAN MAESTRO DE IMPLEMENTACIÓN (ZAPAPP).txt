@@ -1,0 +1,117 @@
+# =========================================================================================
+# SCRIPT ÚNICO DE DESCARGA - PLAN MAESTRO DE IMPLEMENTACIÓN (ZAPAPP)
+# EJECUTAR EN LA TERMINAL DE POWERSHELL EN VS CODE (E:\ZAPAPP)
+# =========================================================================================
+
+$ErrorActionPreference = "Stop"
+
+# 1. Definición de rutas del entorno documental
+$CarpetaDestino = "E:\ZAPAPP\documentacion_ssot"
+$ArchivoDestino = Join-Path $CarpetaDestino "PLAN_DE_DESARROLLO_Y_GUIA.md"
+
+# 2. Asegurar la existencia de la carpeta contenedora
+if (-not (Test-Path $CarpetaDestino)) {
+    New-Item -ItemType Directory -Path $CarpetaDestino | Out-Null
+}
+
+# 3. Contenido técnico y secuencial del Plan Maestro de Implementación
+$ContenidoPlan = @"
+# PLAN MAESTRO DE IMPLEMENTACIÓN Y GUÍA DE DESARROLLO - SHOEMANAGER (ZAPAPP)
+
+Este documento establece la hoja de ruta secuencial e irreversible para la construcción técnica de la aplicación ShoeManager (ZAPAPP). El plan se divide en 5 fases críticas estructuradas bajo los principios de aislamiento total (Offline-First), consistencia transaccional y cero dependencias de servicios externos. Actúa como la guía de desarrollo obligatoria para todos los agentes.
+
+---
+
+## FASE 1: NÚCLEO DE PERSISTENCIA LOCAL Y MOTOR DE DATOS (WINDOWS / ANDROID)
+**Objetivo:** Establecer la estructura del archivo central de persistencia en texto plano y los mecanismos de lectura/escritura atómica en memoria volátil en ambos entornos.
+
+### 1.1 Estructura del Archivo de Persistencia Local
+* **Nodo Maestro de Control Técnico:** Implementación de variables fijas para la versión del sistema, el identificador único del dispositivo que actúa como origen/ordenador maestro y la marca de tiempo de la última sincronización general[cite: 39, 40].
+* **Estructura de la Colección de Saldos:** Modelado del objeto zapatilla con sus campos obligatorios: ID Cronológico (`ZAP-AAAAMMDD-000`), Código de Barras de Fábrica (UPC-A de 12 dígitos), Marca (Texto forzado a mayúsculas), Modelo, Combinación de Colores, Precio de Lista (Decimal no negativo ni igual a cero), Rutas Relativas de Imágenes (Frontal y Perfil), Matriz de Stock por Talla (Clave textual/Valor entero) y Marcas de Tiempo de Auditoría (Creación y Modificación con precisión de milisegundos)[cite: 40, 41, 42, 43, 44, 45, 46, 47, 48].
+* **Estructura de la Colección de Clientes:** Modelado del número telefónico primario como llave única (Solo números con código internacional), Nombre de contacto, Dirección física detallada y Preferencia horaria de despacho[cite: 49, 50, 51, 52].
+* **Estructura de la Colección de Pedidos:** Modelado del ID de Orden transaccional (`PED-AAAAMMDD-000`), Enlace al teléfono del cliente, Detalle analítico (ID de producto, talla textual, volumen comprado, precio pactado final), Monto Total exacto, Estado de la Orden (Restringido estrictamente a las 5 etiquetas secuenciales) e Historial Cronológico de estados[cite: 53, 54, 55, 56, 57, 58, 59, 60].
+* **Estructura de la Colección de Mensajes Interceptados:** Almacén pasivo que indexa Remitente, Contenido escrito íntegro e Instante de captura[cite: 61, 62, 63].
+
+### 1.2 Reglas de Negocio del Inventario Inyectadas en el Motor (STK)
+* **Módulo STK-01 (Control de Unicidad):** Lógica que intercepta el intento de registro duplicado de un código UPC-A. Si existe, aborta la creación y redirige el flujo de la interfaz directamente a la pantalla de edición del registro activo para modificar precio o añadir stock[cite: 64, 65, 66].
+* **Módulo STK-02 (Validación de Consistencia):** Restricción de guardado que exige un stock inicial $> 0$ en al menos una de las claves de la matriz de tallas. Prohibido el uso de flotantes; las tallas se manipulan y comparan únicamente como cadenas de texto plano para evitar errores de redondeo[cite: 67, 68].
+* **Módulo STK-03 (Liquidación Dinámica):** Evaluador en tiempo real que remueve de manera inmediata las tallas con stock igual a cero de las opciones de los catálogos rápidos. Si todas las tallas llegan a cero, altera el estado del producto a "Liquidado", ocultándolo de la operación diaria pero preservándolo para reportes históricos[cite: 69, 70, 71].
+
+---
+
+## FASE 2: MÓDULO DE INTEGRACIÓN PASIVA CON WHATSAPP (ANDROID)
+**Objetivo:** Desarrollar el componente residente en segundo plano para la captura, normalización y procesamiento lingüístico de las notificaciones sin romper el aislamiento offline.
+
+### 2.1 Servicio de Escucha de Notificaciones en Segundo Plano
+* Implementación del escuchador nativo vinculado al ciclo de vida del sistema operativo Android con filtro estricto de origen de paquetes (`com.whatsapp` y `com.whatsapp.w4b`), descartando inmediatamente cualquier otra alerta[cite: 23, 91, 92].
+* Extracción en caliente del texto del remitente y del bloque de texto completo del cuerpo del mensaje entrante[cite: 93].
+
+### 2.2 Motor de Normalización Lingüística Local
+* Diseño del hilo de ejecución en memoria RAM para la limpieza de cadenas: transformación total a letras mayúsculas fijas, remoción completa de acentos ortográficos (A, E, I, O, U), supresión de emoticonos/símbolos gráficos y unificación de espacios en blanco duplicados[cite: 94, 95].
+
+### 2.3 Procesador Semántico de Mensajes (Reglas de Aislamiento)
+* **Detección de Stock:** Escaneo de palabras clave operativas ("TALLA", "NUMERO", "CALCE") acoplado a un validador numérico de rango de calzado (34 al 45 incluyendo decimales). Ejecuta una consulta relacional instantánea al archivo de texto plano local y dispara una alerta interna de disponibilidad al vendedor si hay existencias[cite: 98, 99, 100, 101].
+* **Aislamiento Logístico de Datos de Entrega:**
+    * *Dirección:* Escaneo de palabras de anclaje geográfico ("AVENIDA", "AV.", "CALLE", "JR.", "JIRON", "PASAJE", "PSJ.", "URBANIZACION", "URB.", "DEPARTAMENTO", "DEPTO", "CASA", "MANZANA"). Captura obligatoria de todo el bloque de texto ubicado estrictamente a la derecha del anclaje[cite: 102, 103].
+    * *Cliente:* Extracción del fragmento de identidad precedido por fórmulas de presentación ("MINOMBRE ES", "ME LLAMO", "A NOMBRE DE"). Si está ausente, hereda por defecto el identificador de perfil o el número telefónico de origen[cite: 104, 105].
+    * *Horario:* Captura de términos vinculados a ventanas de distribución física ("MAÑANA", "TARDE", "NOCHE", "SABADO", "ENTRE LAS", "HORAS", "A PARTIR DE") y asignación directa al campo de referencia horaria[cite: 106, 107].
+
+---
+
+## FASE 3: INTERFAZ OPERATIVA Y MÓDULO DE VENTAS OUTBOUND (WINDOWS / ANDROID)
+**Objetivo:** Construir los entornos visuales de alta velocidad para la captura de inventario en movilidad y la administración masiva en escritorio, junto con el generador de enlaces interactivos.
+
+### 3.1 Entorno Móvil (Android)
+* Interfaz ágil de captura: módulo de activación de la cámara para escaneo directo de códigos UPC-A de fábrica[cite: 26].
+* Formulario de registro rápido con inyección directa del código escaneado, asignación de cantidades de la matriz de stock por tallas y disparador nativo para capturar las fotografías del saldo (frontal obligatoria y perfil opcional)[cite: 26, 46].
+
+### 3.2 Entorno de Escritorio (Windows Desktop)
+* Despliegue de una cuadrícula de datos (DataGrid) optimizada para manejo de datos masivos en memoria local, con capacidades de ordenamiento ascendente/descendente, filtros avanzados por texto en mayúsculas de marcas o modelos, y alertas visuales de stock crítico próximo a agotarse[cite: 27].
+
+### 3.3 Generador de Enlaces Interactivos de WhatsApp (Outbound sin APIs Externas)
+* **Flujo del Catálogo Dinámico:** Rutina que filtra el archivo local aislando los saldos con stock $>0$ para la talla seleccionada por el vendedor[cite: 110, 111]. Redacta de forma automatizada el mensaje estructurado legible (Marca, Modelo, Color, Precio en soles) y lo concatena en un enlace de comunicación compatible con el protocolo universal de WhatsApp (`https://wa.me/`). Al pulsar el control visual, abre la aplicación oficial y deposita el texto en la caja de entrada del cliente para envío manual[cite: 112, 113, 114].
+* **Flujo de Confirmación Logística:** Compone un texto informativo con el ID único del pedido, monto total neto a pagar contraentrega y descripción de productos. Genera el enlace universal wa.me que carga el mensaje directamente en el chat del destinatario para su despacho en dos clics por el operador[cite: 115, 116].
+
+---
+
+## FASE 4: MÁQUINA DE ESTADOS LOGÍSTICA Y RECAUDO CONTRAENTREGA (CEREBRO TRANSACCIONAL)
+**Objetivo:** Implementar la lógica lineal e irreversible de control de estados de las órdenes y su impacto exacto e inmediato en el stock físico del inventario local.
+
+### 4.1 Comportamiento Lógico de los Estados de las Órdenes
+1.  **Propuesta Pendiente (Fase de Captura):** Estado inicial por análisis sintáctico automático o prellenado manual en movilidad. Impacto en inventario nulo; las unidades permanecen disponibles comercialmente en el sistema[cite: 120, 121, 122, 123].
+2.  **Orden Confirmada (Fase de Reserva de Existencias):** Activado manualmente por el vendedor tras validar los datos de dirección en la interfaz. El motor ejecuta un descuento inmediato, obligatorio y automático de las unidades correspondientes en la matriz de tallas del archivo local para evitar sobreventas[cite: 124, 125, 126, 127].
+3.  **Pedido en Ruta (Fase de Distribución Física):** Actualización manual al entregar los paquetes al transportista o iniciar la ruta. Bloquea de forma absoluta cualquier alteración en los precios pactados, modelos seleccionados o volúmenes comprados, congelando la información transaccional[cite: 128, 129, 131].
+4.  **Entrega Exitosa (Fase de Cierre Comercial):** Confirmación manual por el vendedor una vez que el dinero en efectivo o transferencia contraentrega ha ingresado físicamente a su patrimonio personal. Consolida el descuento del inventario de forma irreversible y suma de manera permanente el valor monetario neto al registro de ingresos acumulados del sistema[cite: 132, 133, 134, 142, 143].
+5.  **Cancelación Definitiva (Fase de Retorno y Reversa):** Activado por desistimiento del cliente, ausencia en domicilio o falla en la prueba física del calzado. El sistema ejecuta una instrucción automática de reversa: reintegra las unidades reservadas a la matriz de stock por tallas del producto y conserva la orden etiquetada como cancelada para fines de auditoría histórica[cite: 135, 136, 137, 138].
+
+---
+
+## FASE 5: MOTOR DE FUSIÓN INCREMENTAL POR CABLE Y AUDITORÍA LOCAL
+**Objetivo:** Desarrollar el algoritmo de unificación de datos bidireccional coordinado desde Windows utilizando el protocolo MTP por cable físico USB, junto con el generador de reportes financieros analíticos desconectados.
+
+### 5.1 Algoritmo de Fusión Incremental de Datos (Merge por USB)
+* **Paso 1: Apertura del Canal y Selección Guiada:** Rutina en Windows que despliega una ventana de navegación nativa para obligar al usuario a direccionar la carpeta del almacenamiento interno del celular conectado por USB, otorgando los permisos de acceso al motor de escritorio[cite: 74, 75, 76].
+* **Paso 2: Evaluación Comparativa en RAM:** Lectura paralela simultánea del archivo Base Maestra (PC) y Base Móvil (Celular) cargándolos en la memoria volátil del procesador[cite: 77].
+* **Paso 3: Resolución Cronológica de Conflictos:** Recorrido registro por registro de saldos, clientes y pedidos. Ante llaves primarias idénticas, aplica la regla de control de marcas de tiempo: compara los timestamps de modificación con precisión de milisegundos. El objeto con la marca de tiempo más reciente sobreescribe por completo al más antiguo, eliminando duplicidad de registros[cite: 78, 79, 80].
+* **Paso 4: Inserción de Registros Huérfanos:** Los elementos que existan únicamente en la Base Móvil se insertan en la lista unificada consolidada y viceversa, equilibrando de forma bidireccional los cambios de ambos entornos[cite: 81, 82].
+* **Paso 5: Escritura Atómica Secuencial:** Generación del set unificado y reemplazo inmediato del archivo de texto plano local de la computadora; acto seguido, escribe de forma secuencial el mismo archivo de reemplazo en el almacenamiento del celular a través del cable USB, garantizando consistencia atómica completa[cite: 83].
+* **Paso 6: Sincronización Binaria de Imágenes:** Inspección de nombres de archivos en las carpetas multimedia de ambos extremos. Calcula la huella digital criptográfica (hash hash MD5/SHA) del archivo binario. Si una huella digital existe en el teléfono pero falta en el disco duro de Windows, el archivo físico se transmite a través del cable USB hacia la PC. Las fotos editadas en la PC se transmiten en dirección inversa hacia el móvil[cite: 84, 85, 86, 87].
+
+### 5.2 Módulo de Liquidación Administrativa e Informes Analíticos
+* **Reporte de Caja Diario y Acumulado:** Algoritmo local que barre la colección de pedidos filtrando exclusivamente aquellos en estado "Entrega Exitosa". Multiplica precios pactados por cantidades individuales para renderizar un indicador de ingresos brutos en un rango temporal. Calcula de forma paralela la métrica de tasa de rechazo dividiendo las órdenes en estado de "Cancelación Definitiva" entre el total de propuestas generadas[cite: 146, 147, 148].
+* **Reporte de Saldos Agotados (Velocidad de Venta):** Filtra e identifica las zapatillas cuyas existencias en todas sus tallas asociadas sean iguales a cero. Compara de forma narrativa la marca de tiempo de creación del saldo con la marca de tiempo del último pedido exitoso vinculado a dicho ID, calculando la cantidad de días transcurridos para determinar el índice de rotación comercial histórico local[cite: 150, 151, 152].
+"@
+
+# 4. Forzar la escritura limpia del Plan Maestro en formato Markdown con codificación UTF-8
+Set-Content -Path $ArchivoDestino -Value $ContenidoPlan -Encoding UTF8
+
+# 5. Confirmación final en pantalla
+if (Test-Path $ArchivoDestino) {
+    Write-Host ""
+    Write-Host "✅ ¡PLAN MAESTRO DE IMPLEMENTACIÓN GUARDADO CON ÉXITO!" -ForegroundColor Green
+    Write-Host "📄 El plan de desarrollo y guía operativa se guardó en: $ArchivoDestino" -ForegroundColor Cyan
+    Write-Host "🤖 Este documento regirá de forma estricta y silenciosa los próximos scripts de código." -ForegroundColor Green
+    Write-Host ""
+} else {
+    Write-Host "❌ Error crítico: No se pudo escribir el plan de desarrollo en el disco." -ForegroundColor Red
+}
