@@ -1,0 +1,27 @@
+# Archivos de compilación de .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio temporary files
+.vs/
+
+# MAUI / Xamarin
+*.apk
+*.aab
+*.ipa
+*.app
+*.xcodeproj
+*.xcworkspace
+
+# Logs y archivos generados temporales
+build_*.txt
+*.log
+
+# Archivos y carpetas del sistema
+Thumbs.db
+Desktop.ini
+*.DS_Store
