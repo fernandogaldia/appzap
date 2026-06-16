@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ShoeManager.Android.MainPage"
+             Title="Gestor de Calzado">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="18">
+            <Label Text="Gestor de Calzado" Style="{StaticResource Headline}" />
+            <Label Text="Crea un pedido rápido y verifica la lógica de negocio." Style="{StaticResource SubHeadline}" />
+
+            <Entry x:Name="PhoneEntry" Placeholder="Teléfono del cliente" Keyboard="Telephone" />
+            <Frame Padding="12" BorderColor="LightGray" CornerRadius="10">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Agregar detalle" FontAttributes="Bold" />
+                    <Entry x:Name="ItemIdEntry" Placeholder="ID del artículo" />
+                    <Entry x:Name="SizeEntry" Placeholder="Talla" />
+                    <Entry x:Name="QuantityEntry" Placeholder="Cantidad" Keyboard="Numeric" />
+                    <Entry x:Name="PriceEntry" Placeholder="Precio pactado" Keyboard="Numeric" />
+                    <Button Text="Agregar artículo" Clicked="OnAddItemClicked" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <Label Text="Artículos del pedido" FontAttributes="Bold" />
+            <CollectionView x:Name="ItemsCollection" HeightRequest="180">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10" Margin="0,4" BorderColor="LightGray" CornerRadius="10">
+                            <Grid ColumnDefinitions="*,Auto,Auto,Auto" RowDefinitions="Auto">
+                                <Label Text="{Binding SaldoID}" FontAttributes="Bold" Grid.Column="0" />
+                                <Label Text="{Binding Talla}" Grid.Column="1" HorizontalOptions="End" />
+                                <Label Text="{Binding Cantidad}" Grid.Column="2" HorizontalOptions="End" />
+                                <Label Text="{Binding PrecioPactado, StringFormat='{}{0:C2}'}" Grid.Column="3" HorizontalOptions="End" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Button Text="Crear pedido" Clicked="OnCreateOrderClicked" />
+            <Label x:Name="StatusLabel" TextColor="Green" LineBreakMode="WordWrap" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
