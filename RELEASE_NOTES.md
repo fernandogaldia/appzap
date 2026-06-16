@@ -40,3 +40,29 @@ Cambios del release v1.1.0:
 Notas:
 - Los archivos `build_*`, `obj/`, `bin/` se excluyen de este release y no quedan en el repo.
 - Este release cubre el estado completo del proyecto con soporte de localización en español.
+
+Release v1.2.0 - Lógica completa de pedidos e inventario
+
+Resumen:
+- Se completó la lógica de estado de pedidos y la reserva de stock en `ShoeManager.Core`.
+- Se añadió una interfaz de usuario funcional en `ShoeManager.Windows` para crear pedidos y gestionar artículos.
+- Se actualizó la documentación del proyecto para reflejar los cambios realizados.
+
+Cambios incluidos:
+- `ShoeManager.Core/Pedido.cs`
+  - Agregado flujo de estados de pedido y validación de transiciones.
+  - Se asegura el historial de estados y fechas de modificación.
+- `ShoeManager.Core/OrderController.cs`
+  - Creación de pedidos con transición al estado `Creado`.
+  - Métodos añadidos para confirmar, enviar, entregar y cancelar pedidos.
+- `ShoeManager.Core/Saldo.cs`
+  - Añadidos métodos para verificar y reservar stock por talla.
+- `ShoeManager.Core/BaseMaestra.cs`
+  - Validación de inventario al registrar pedidos.
+  - Inicialización de inventario predeterminado en primera ejecución.
+- `ShoeManager.Windows/MainWindow.xaml` y `ShoeManager.Windows/MainWindow.xaml.cs`
+  - Interfaz funcional de escritorio para crear y gestionar pedidos.
+
+Verificación:
+- `dotnet build` completado sin errores.
+- `dotnet test` para `ShoeManager.Core.Tests` pasado con éxito.

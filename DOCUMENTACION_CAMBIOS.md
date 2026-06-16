@@ -42,4 +42,11 @@ Siguientes pasos sugeridos (opcional):
 - Añadir recursos de localización (`.resx`) para soportar múltiples idiomas en el futuro.
 - Hacer commit de los cambios y crear un tag/release.
 
+## Cambios adicionales completados en v1.2.0
+- Implementada la lógica de flujo de pedidos en `ShoeManager.Core`, con estados en español y validación de transiciones.
+- Añadida la reserva de stock por talla en `ShoeManager.Core/Saldo.cs` y validación al registrar pedidos.
+- Mejorada la persistencia en `ShoeManager.Core/BaseMaestra.cs` para soportar inventario predeterminado y guardar pedidos correctamente.
+- Añadida UI de escritorio en `ShoeManager.Windows` para crear pedidos y gestionar artículos.
+- Verificación de calidad: `dotnet build` pasó y las pruebas unitarias en `ShoeManager.Core.Tests` se ejecutaron con éxito.
+
 Si quieres, hago el commit y preparo un changelog más formal o traduzco comentarios/strings restantes en documentación y scripts.

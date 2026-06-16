@@ -5,8 +5,64 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShoeManager.Windows"
         mc:Ignorable="d"
-        Title="Gestor de Calzado - Escritorio" Height="450" Width="800">
-    <Grid>
+        Title="Gestor de Calzado - Escritorio" Height="520" Width="900">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
 
+        <TextBlock Text="Gestor de Calzado" FontSize="24" FontWeight="Bold" Grid.ColumnSpan="2" />
+        <TextBlock Text="Crea pedidos y administra la lógica de inventario." Margin="0,4,0,16" Grid.Row="1" Grid.ColumnSpan="2" />
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,16,0" VerticalAlignment="Top">
+            <TextBlock Text="Datos del cliente" FontWeight="SemiBold" Margin="0,0,0,8" />
+            <TextBlock Text="Teléfono" />
+            <TextBox x:Name="PhoneTextBox" />
+
+            <Separator Margin="0,12,0,12" />
+
+            <TextBlock Text="Detalle de artículo" FontWeight="SemiBold" Margin="0,0,0,8" />
+            <TextBlock Text="ID del artículo" />
+            <TextBox x:Name="ItemIdTextBox" />
+            <TextBlock Text="Talla" />
+            <TextBox x:Name="SizeTextBox" />
+            <TextBlock Text="Cantidad" />
+            <TextBox x:Name="QuantityTextBox" />
+            <TextBlock Text="Precio pactado" />
+            <TextBox x:Name="PriceTextBox" />
+            <Button Content="Agregar artículo" Click="AddItemButton_Click" Margin="0,12,0,0" />
+
+            <Button Content="Crear pedido" Click="CreateOrderButton_Click" Margin="0,12,0,0" />
+        </StackPanel>
+
+        <Border Grid.Row="1" Grid.Column="1" BorderBrush="Gray" BorderThickness="1" CornerRadius="8" Padding="12">
+            <StackPanel>
+                <TextBlock Text="Artículos en el pedido" FontWeight="SemiBold" Margin="0,0,0,8" />
+                <ListView x:Name="ItemsListView" Height="300">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
+                                <TextBlock Text="ID:" FontWeight="Bold" />
+                                <TextBlock Text=" {Binding SaldoID}" Width="120" />
+                                <TextBlock Text="Talla:" FontWeight="Bold" />
+                                <TextBlock Text=" {Binding Talla}" Width="80" />
+                                <TextBlock Text="Cantidad:" FontWeight="Bold" />
+                                <TextBlock Text=" {Binding Cantidad}" Width="80" />
+                                <TextBlock Text="Precio:" FontWeight="Bold" />
+                                <TextBlock Text=" {Binding PrecioPactado, StringFormat={}{0:C2}}" Width="100" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </Border>
+
+        <TextBlock x:Name="StatusTextBlock" Grid.Row="2" Grid.ColumnSpan="2" Margin="0,16,0,0" TextWrapping="Wrap" />
     </Grid>
 </Window>

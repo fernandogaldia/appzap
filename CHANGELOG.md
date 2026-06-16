@@ -14,21 +14,24 @@
 ### Fixed
 - Verificación de compilación completa con `dotnet build -c Debug` sin errores en la solución.
 
-## [Unreleased]
+## [v1.2.0] - 2026-06-16
 
 ### Added
-- Created `ShoeManager.Core.Tests` project with unit tests for `Pedido`, `OrderController`, and `Cliente`.
-- Added `OrderController` to manage the creation of orders in `ShoeManager.Core`.
-- Implemented validation and total calculation in `Pedido`.
-- Added customer validation and friendly `ToString()` in `Cliente`.
-- Added `README.md` documenting project structure and environment setup.
+- Implementado flujo completo de pedido y stock en `ShoeManager.Core`.
+- Añadidos estados de pedido en español y control de transiciones (`Pendiente`, `Creado`, `Confirmado`, `Enviado`, `Entregado`, `Cancelado`).
+- Añadida reserva de stock por talla al registrar pedidos.
+- Añadida inicialización de inventario predeterminado en `BaseMaestra` para la primera ejecución.
+- Añadida UI funcional de Windows en `ShoeManager.Windows` para crear pedidos y ver artículos.
+- Documentación actualizada en `DOCUMENTACION_CAMBIOS.md`, `RELEASE_NOTES.md` y `CHANGELOG.md`.
+
+### Changed
+- Mejorado `OrderController` para manejar transiciones de estado en lugar de solo crear pedidos.
+- Actualizado `BaseMaestra.RegistrarPedido` para validar inventario y almacenar pedidos correctamente.
 
 ### Fixed
-- Added Android SDK and OpenJDK 17 setup information to enable successful full solution builds.
-- Corrected `Cliente.cs` syntax during implementation.
+- Corregida la lógica de carga y guardado de datos para preservar saldos y pedidos.
+- Verificación de compilación exitosa de la solución completa.
 
 ### Notes
-- Full solution `ShoeManager.sln` builds successfully after Android SDK configuration.
-- Unit tests pass for the core logic.
-- An Android emulator `ShoeManager_33` was created and the app package `com.companyname.shoemanager.android` was launched successfully.
-- The app process was verified as running in the emulator.
+- El proyecto compila correctamente con `dotnet build`.
+- Las pruebas de `ShoeManager.Core.Tests` pasan con éxito.

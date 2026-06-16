@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using Xunit;
 using ShoeManager.Core;
 
@@ -16,7 +18,7 @@ namespace ShoeManager.Core.Tests
             var p = new Pedido("+123456", items);
             Assert.NotNull(p.ID);
             Assert.Equal(40m, p.MontoTotal);
-            Assert.Equal("Nuevo", p.Estado);
+            Assert.Equal(EstadosPedido.Pendiente, p.Estado);
             Assert.Single(p.HistorialEstados);
         }
 
@@ -30,8 +32,8 @@ namespace ShoeManager.Core.Tests
             var ctrl = new OrderController();
             var id = ctrl.CreateOrder(p);
             Assert.Equal(p.ID, id);
-            Assert.Equal("Creado", p.Estado);
-            Assert.Contains("Creado", p.HistorialEstados);
+            Assert.Equal(EstadosPedido.Creado, p.Estado);
+            Assert.Contains(EstadosPedido.Creado, p.HistorialEstados);
         }
 
         [Fact]
@@ -50,9 +52,10 @@ namespace ShoeManager.Core.Tests
             try
             {
                 var baseMaestra = new BaseMaestra();
+                baseMaestra.InicializarInventarioPredeterminado();
                 var items = new List<DetallePedido>
                 {
-                    new DetallePedido { SaldoID = "s1", Talla = "42", Cantidad = 2, PrecioPactado = 10m }
+                    new DetallePedido { SaldoID = baseMaestra.Saldos[0].ID, Talla = "42", Cantidad = 2, PrecioPactado = 10m }
                 };
                 var pedido = new Pedido("+123456", items);
                 string id = baseMaestra.RegistrarPedido(pedido, tmpFile);
@@ -60,7 +63,7 @@ namespace ShoeManager.Core.Tests
                 var reloaded = BaseMaestra.Cargar(tmpFile);
                 Assert.Single(reloaded.Pedidos);
                 Assert.Equal(id, reloaded.Pedidos[0].ID);
-                Assert.Equal("Creado", reloaded.Pedidos[0].Estado);
+                Assert.Equal(EstadosPedido.Creado, reloaded.Pedidos[0].Estado);
                 Assert.Equal(20m, reloaded.Pedidos[0].MontoTotal);
             }
             finally
