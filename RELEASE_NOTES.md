@@ -29,7 +29,14 @@ Verificación:
 
 Tag creado:
 - `v1.0.0`
+- `v1.1.0`
+
+Cambios del release v1.1.0:
+- Commit `54f6746` agrega el proyecto completo y documentación inicial.
+- Se incluyó el proyecto MAUI Android, el proyecto WPF Windows y el proyecto Core.
+- Se añadieron archivos de configuración y recursos necesarios para compilar la solución.
+- Se añadió `.gitignore` para excluir artefactos de compilación y logs.
 
 Notas:
-- Quedan en el repositorio archivos no comiteados y generados (`build_*`, `obj/`, `bin/`) que no forman parte de este release formal.
-- Este release cubre la experiencia visible y los mensajes de validación en la aplicación actual.
+- Los archivos `build_*`, `obj/`, `bin/` se excluyen de este release y no quedan en el repo.
+- Este release cubre el estado completo del proyecto con soporte de localización en español.
