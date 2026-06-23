@@ -23,6 +23,12 @@
         <KeyBinding Key="R" Modifiers="Control" Gesture="CTRL+R" Command="ApplicationCommands.NotACommand" />
     </Window.InputBindings>
 
+    <Window.Resources>
+        <local:BoolToEstadoConverter x:Key="BoolToEstadoConverter" />
+        <local:ItemTotalConverter x:Key="ItemTotalConverter" />
+        <local:EstadoToVisibilidadConverter x:Key="EstadoToVisibilidadConverter" />
+    </Window.Resources>
+
     <Grid Margin="8">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -105,6 +111,7 @@
                               BorderBrush="#ddd" BorderThickness="1"
                               FontSize="12">
                         <DataGrid.Resources>
+                            <local:BoolToEstadoConverter x:Key="BoolToEstadoConverter" />
                             <!-- Estilo para stock crítico (rojo) -->
                             <Style x:Key="StockCriticoStyle" TargetType="DataGridCell">
                                 <Setter Property="Background" Value="#ffe0e0" />
@@ -427,10 +434,4 @@
             </Grid>
         </Border>
     </Grid>
-
-    <Window.Resources>
-        <local:BoolToEstadoConverter x:Key="BoolToEstadoConverter" />
-        <local:ItemTotalConverter x:Key="ItemTotalConverter" />
-        <local:EstadoToVisibilidadConverter x:Key="EstadoToVisibilidadConverter" />
-    </Window.Resources>
 </Window>

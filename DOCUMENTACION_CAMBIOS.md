@@ -7,6 +7,7 @@ Se implementó la aplicación completa **ShoeManager** (antes ZAPAPP) siguiendo 
 **Estado:** ✅ PROYECTO COMPLETO - Todos los sprints finalizados
 **Release:** v2.0.0
 **APK Android:** Generado exitosamente (147 MB)
+**App Windows:** Ejecutándose correctamente
 
 ---
 
@@ -91,6 +92,12 @@ Se implementó la aplicación completa **ShoeManager** (antes ZAPAPP) siguiendo 
   - Ctrl+S: Guardar
 - **Generador de Enlaces wa.me:** Desde el historial de pedidos
 - **LoggerLocal:** Sistema de logging de operaciones
+
+#### **Corrección de Bug (23/06/2026):**
+- **Problema:** Error al ejecutar la app Windows - recurso `BoolToEstadoConverter` no encontrado
+- **Solución:** Movido el recurso del `DataGrid.Resources` al `Window.Resources` (scope global)
+- **Archivo:** `ShoeManager.Windows/MainWindow.xaml`
+- **Estado:** ✅ Corregido y app ejecutándose correctamente
 
 ---
 
@@ -374,6 +381,7 @@ Se implementó la aplicación completa **ShoeManager** (antes ZAPAPP) siguiendo 
 - ✅ Header con estadísticas
 - ✅ Barra de estado inferior
 - ✅ CommandBindings: Ctrl+N, Ctrl+F, Ctrl+S
+- ✅ **Corrección:** BoolToEstadoConverter movido a Window.Resources (línea 28)
 
 ### **DialogSaldo.xaml (Windows)**
 - ✅ Formulario de edición de saldos
@@ -475,6 +483,8 @@ cd c:\Users\USUARIO\Desktop\appzap
 dotnet run --project ShoeManager.Windows\ShoeManager.Windows.csproj
 ```
 
+**Estado:** ✅ App ejecutándose correctamente (PID 18620, 127 MB)
+
 ### **Android:**
 ```cmd
 # Compilar
@@ -513,23 +523,24 @@ dotnet test ShoeManager.Core.Tests\ShoeManager.Core.Tests.csproj
 
 ## ✅ VERIFICACIÓN DE CALIDAD
 
-- ✅ Compilación Windows: 0 errores, 0 warnings
+- ✅ Compilación Windows: 0 errores, 6 warnings menores
 - ✅ Compilación Android: 0 errores, 0 warnings
 - ✅ Compilación iOS: 0 errores
 - ✅ Compilación MacCatalyst: 0 errores
 - ✅ Tests: 20/20 pasando
+- ✅ App Windows: Ejecutándose correctamente (PID 18620)
 - ✅ Código documentado con XML comments
 - ✅ Arquitectura limpia: Core sin dependencias de UI
 - ✅ Principios SOLID aplicados
 - ✅ APK Android generado: 147 MB
-- ✅ GitHub actualizado: Commit e3221f4
+- ✅ GitHub actualizado: Commit 59a71a2
 - ✅ Release v2.0.0 publicado
 
 ---
 
 ## 🎉 LOGROS FINALES
 
-- **Commit:** e3221f4
+- **Commit:** 59a71a2
 - **Tag:** v2.0.0
 - **Repositorio:** https://github.com/fernandogaldia/appzap
 - **Release:** https://github.com/fernandogaldia/appzap/releases/tag/v2.0.0
@@ -537,6 +548,18 @@ dotnet test ShoeManager.Core.Tests\ShoeManager.Core.Tests.csproj
 - **Líneas:** ~4,500 líneas
 - **Tests:** 20/20 pasando
 - **APK:** 147 MB listo para instalar
+- **App Windows:** Ejecutándose correctamente
+
+---
+
+## 🔧 CORRECCIONES POST-IMPLEMENTACIÓN
+
+### **Corrección 1: BoolToEstadoConverter (23/06/2026)**
+- **Problema:** Error XamlParseException al ejecutar app Windows
+- **Causa:** Recurso definido en DataGrid.Resources pero usado en Window.Resources
+- **Solución:** Movido recurso a Window.Resources (scope global)
+- **Archivo:** `ShoeManager.Windows/MainWindow.xaml` (línea 28)
+- **Estado:** ✅ Corregido
 
 ---
 
