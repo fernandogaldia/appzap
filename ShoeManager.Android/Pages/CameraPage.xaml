@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ShoeManager.Android.Pages.CameraPage"
+             Title="Capturar Foto">
+    <VerticalStackLayout Padding="20" Spacing="16" VerticalOptions="Center">
+        <Label Text="Capturar Fotografía del Producto" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
+        <Frame HeightRequest="300" BorderColor="LightGray" CornerRadius="10" BackgroundColor="#f0f0f0">
+            <Image x:Name="CapturedImage" Aspect="AspectFit" />
+        </Frame>
+        <Label x:Name="PhotoTypeLabel" Text="Foto: Frontal" FontSize="14" HorizontalOptions="Center" />
+        <Button x:Name="CaptureButton" Text="📸 Tomar Foto" Clicked="OnCaptureClicked" FontSize="16" />
+        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+            <Button Text="✅ Usar esta foto" Clicked="OnUsePhotoClicked" BackgroundColor="#4CAF50" TextColor="White" />
+            <Button Text="🔙 Cancelar" Clicked="OnCancelClicked" BackgroundColor="#f44336" TextColor="White" />
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ShoeManager.Android.Pages.ClientesPage"
+             Title="Clientes">
+    <VerticalStackLayout Padding="16" Spacing="12">
+        <Label Text="Registro de Clientes" FontSize="20" FontAttributes="Bold" />
+        <Frame Padding="12" BorderColor="LightGray" CornerRadius="8">
+            <VerticalStackLayout Spacing="8">
+                <Entry x:Name="TelefonoEntry" Placeholder="Teléfono" Keyboard="Telephone" />
+                <Entry x:Name="NombreEntry" Placeholder="Nombre" />
+                <Entry x:Name="DireccionEntry" Placeholder="Dirección" />
+                <Button Text="💾 Guardar Cliente" Clicked="OnGuardarClienteClicked" BackgroundColor="#4CAF50" TextColor="White" />
+            </VerticalStackLayout>
+        </Frame>
+        <Label Text="Clientes Registrados" FontAttributes="Bold" />
+        <CollectionView x:Name="ClientesCollection">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="0,4" BorderColor="LightGray" CornerRadius="8">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Telefono}" FontAttributes="Bold" />
+                            <Label Text="{Binding Nombre}" />
+                            <Label Text="{Binding Direccion}" FontSize="12" TextColor="Gray" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Label x:Name="StatusLabel" TextColor="Green" />
+    </VerticalStackLayout>
+</ContentPage>

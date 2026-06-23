@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ShoeManager.Android.Pages.PedidosPage"
+             Title="Pedidos">
+    <VerticalStackLayout Padding="16" Spacing="12">
+        <Label Text="Historial de Pedidos" FontSize="20" FontAttributes="Bold" />
+        <CollectionView x:Name="PedidosCollection">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="0,4" BorderColor="LightGray" CornerRadius="8">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="{Binding ID}" FontAttributes="Bold" FontSize="13" />
+                            <Label Text="{Binding ClienteTelefono, StringFormat='Cliente: {0}'}" FontSize="12" />
+                            <Label Text="{Binding MontoTotal, StringFormat='Total: {0:C2}'}" FontSize="12" />
+                            <HorizontalStackLayout Spacing="8">
+                                <Frame Padding="6,2" CornerRadius="4" BackgroundColor="#e3f2fd">
+                                    <Label Text="{Binding Estado}" FontSize="11" FontAttributes="Bold" />
+                                </Frame>
+                                <Label Text="{Binding FechaCreacion, StringFormat='{0:dd/MM/yy HH:mm}'}" FontSize="11" TextColor="Gray" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Label x:Name="EmptyLabel" Text="No hay pedidos registrados" TextColor="Gray" HorizontalOptions="Center" IsVisible="False" />
+    </VerticalStackLayout>
+</ContentPage>

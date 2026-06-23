@@ -2,42 +2,59 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ShoeManager.Android.MainPage"
-             Title="Gestor de Calzado">
+             Title="ShoeManager">
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="18">
-            <Label Text="Gestor de Calzado" Style="{StaticResource Headline}" />
-            <Label Text="Crea un pedido rápido y verifica la lógica de negocio." Style="{StaticResource SubHeadline}" />
+        <VerticalStackLayout Padding="16" Spacing="12">
 
+            <!-- Header -->
+            <Label Text="👟 Gestor de Calzado" FontSize="24" FontAttributes="Bold" />
+            <Label x:Name="StatsLabel" Text="0 saldos | 0 pedidos" FontSize="13" TextColor="Gray" />
+
+            <!-- Botones de navegación rápida -->
+            <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                <Button Text="📷 Escanear" Clicked="OnScannerClicked" BackgroundColor="#2196F3" TextColor="White" FontSize="13" />
+                <Button Text="📸 Foto" Clicked="OnCameraClicked" BackgroundColor="#FF9800" TextColor="White" FontSize="13" />
+                <Button Text="👥 Clientes" Clicked="OnClientesClicked" BackgroundColor="#4CAF50" TextColor="White" FontSize="13" />
+                <Button Text="📋 Pedidos" Clicked="OnPedidosClicked" BackgroundColor="#9C27B0" TextColor="White" FontSize="13" />
+            </HorizontalStackLayout>
+
+            <!-- Crear pedido -->
+            <Label Text="Crear Pedido Rápido" FontSize="18" FontAttributes="Bold" />
             <Entry x:Name="PhoneEntry" Placeholder="Teléfono del cliente" Keyboard="Telephone" />
             <Frame Padding="12" BorderColor="LightGray" CornerRadius="10">
-                <VerticalStackLayout Spacing="12">
-                    <Label Text="Agregar detalle" FontAttributes="Bold" />
-                    <Entry x:Name="ItemIdEntry" Placeholder="ID del artículo" />
-                    <Entry x:Name="SizeEntry" Placeholder="Talla" />
-                    <Entry x:Name="QuantityEntry" Placeholder="Cantidad" Keyboard="Numeric" />
-                    <Entry x:Name="PriceEntry" Placeholder="Precio pactado" Keyboard="Numeric" />
-                    <Button Text="Agregar artículo" Clicked="OnAddItemClicked" />
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Artículo" FontAttributes="Bold" FontSize="14" />
+                    <HorizontalStackLayout Spacing="6">
+                        <Entry x:Name="ItemIdEntry" Placeholder="ID del artículo" WidthRequest="160" />
+                        <Button Text="📷" WidthRequest="44" HeightRequest="44" Clicked="OnScanFromOrderClicked" BackgroundColor="#2196F3" TextColor="White" />
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="6">
+                        <Entry x:Name="SizeEntry" Placeholder="Talla" WidthRequest="80" />
+                        <Entry x:Name="QuantityEntry" Placeholder="Cant" Keyboard="Numeric" WidthRequest="80" />
+                        <Entry x:Name="PriceEntry" Placeholder="Precio" Keyboard="Numeric" WidthRequest="100" />
+                    </HorizontalStackLayout>
+                    <Button Text="➕ Agregar artículo" Clicked="OnAddItemClicked" BackgroundColor="#4CAF50" TextColor="White" />
                 </VerticalStackLayout>
             </Frame>
 
             <Label Text="Artículos del pedido" FontAttributes="Bold" />
-            <CollectionView x:Name="ItemsCollection" HeightRequest="180">
+            <CollectionView x:Name="ItemsCollection" HeightRequest="160">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame Padding="10" Margin="0,4" BorderColor="LightGray" CornerRadius="10">
+                        <Frame Padding="8" Margin="0,3" BorderColor="LightGray" CornerRadius="8">
                             <Grid ColumnDefinitions="*,Auto,Auto,Auto" RowDefinitions="Auto">
-                                <Label Text="{Binding SaldoID}" FontAttributes="Bold" Grid.Column="0" />
-                                <Label Text="{Binding Talla}" Grid.Column="1" HorizontalOptions="End" />
-                                <Label Text="{Binding Cantidad}" Grid.Column="2" HorizontalOptions="End" />
-                                <Label Text="{Binding PrecioPactado, StringFormat='{}{0:C2}'}" Grid.Column="3" HorizontalOptions="End" />
+                                <Label Text="{Binding SaldoID}" FontAttributes="Bold" Grid.Column="0" FontSize="12" />
+                                <Label Text="{Binding Talla, StringFormat='Talla {0}'}" Grid.Column="1" FontSize="12" />
+                                <Label Text="{Binding Cantidad, StringFormat='x{0}'}" Grid.Column="2" FontSize="12" />
+                                <Label Text="{Binding PrecioPactado, StringFormat='{}{0:C2}'}" Grid.Column="3" FontSize="12" />
                             </Grid>
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <Button Text="Crear pedido" Clicked="OnCreateOrderClicked" />
+            <Button Text="💾 Crear Pedido" Clicked="OnCreateOrderClicked" BackgroundColor="#FF5722" TextColor="White" FontAttributes="Bold" />
             <Label x:Name="StatusLabel" TextColor="Green" LineBreakMode="WordWrap" />
         </VerticalStackLayout>
     </ScrollView>

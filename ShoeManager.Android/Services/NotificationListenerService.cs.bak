@@ -1,0 +1,57 @@
+﻿using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Service.Notification;
+using System;
+
+namespace ShoeManager.Android.Services
+{
+    [Service(Name = "com.shoemanager.android.NotificationListenerService",
+             Permission = "android.permission.BIND_NOTIFICATION_LISTENER_SERVICE",
+             Exported = true)]
+    [IntentFilter(new[] { "android.service.notification.NotificationListenerService" })]
+    public class NotificationListenerService : Android.Service.Notification.NotificationListenerService
+    {
+        private const string WhatsappPackage = "com.whatsapp";
+        private const string WhatsappBusinessPackage = "com.whatsapp.w4b";
+
+        public override void OnNotificationPosted(StatusBarNotification sbn)
+        {
+            base.OnNotificationPosted(sbn);
+
+            try
+            {
+                string packageName = sbn.PackageName ?? "";
+                if (packageName != WhatsappPackage && packageName != WhatsappBusinessPackage)
+                    return;
+
+                var extras = sbn.Notification?.Extras;
+                if (extras == null) return;
+
+                string? remitente = extras.GetString(Android.App.Notification.ExtraTitle);
+                string? contenido = extras.GetString(Android.App.Notification.ExtraText);
+
+                if (!string.IsNullOrWhiteSpace(remitente) && !string.IsNullOrWhiteSpace(contenido))
+                {
+                    // Solo log para depuración
+                    System.Diagnostics.Debug.WriteLine($"[WhatsApp] De: {remitente} - Msg: {contenido}");
+                    
+                    // Notificar a la UI
+                    var intent = new Intent("NUEVO_MENSAJE_WHATSAPP");
+                    intent.PutExtra("remitente", remitente);
+                    intent.PutExtra("contenido", contenido);
+                    SendBroadcast(intent);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[WhatsApp] Error: {ex.Message}");
+            }
+        }
+
+        public override void OnNotificationRemoved(StatusBarNotification sbn)
+        {
+            base.OnNotificationRemoved(sbn);
+        }
+    }
+}

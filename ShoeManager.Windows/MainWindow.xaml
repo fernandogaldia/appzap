@@ -4,65 +4,433 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShoeManager.Windows"
+        xmlns:core="clr-namespace:ShoeManager.Core;assembly=ShoeManager.Core"
         mc:Ignorable="d"
-        Title="Gestor de Calzado - Escritorio" Height="520" Width="900">
-    <Grid Margin="16">
+        Title="ShoeManager - Gestión de Calzado" 
+        Height="720" Width="1100" 
+        WindowStartupLocation="CenterScreen">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="New" Executed="NewCommand_Executed" />
+        <CommandBinding Command="Find" Executed="FindCommand_Executed" />
+        <CommandBinding Command="Save" Executed="SaveCommand_Executed" />
+    </Window.CommandBindings>
+
+    <Window.InputBindings>
+        <KeyBinding Key="N" Modifiers="Control" Command="New" />
+        <KeyBinding Key="F" Modifiers="Control" Command="Find" />
+        <KeyBinding Key="S" Modifiers="Control" Command="Save" />
+        <KeyBinding Key="R" Modifiers="Control" Gesture="CTRL+R" Command="ApplicationCommands.NotACommand" />
+    </Window.InputBindings>
+
+    <Grid Margin="8">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="3*" />
-        </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Gestor de Calzado" FontSize="24" FontWeight="Bold" Grid.ColumnSpan="2" />
-        <TextBlock Text="Crea pedidos y administra la lógica de inventario." Margin="0,4,0,16" Grid.Row="1" Grid.ColumnSpan="2" />
-
-        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,16,0" VerticalAlignment="Top">
-            <TextBlock Text="Datos del cliente" FontWeight="SemiBold" Margin="0,0,0,8" />
-            <TextBlock Text="Teléfono" />
-            <TextBox x:Name="PhoneTextBox" />
-
-            <Separator Margin="0,12,0,12" />
-
-            <TextBlock Text="Detalle de artículo" FontWeight="SemiBold" Margin="0,0,0,8" />
-            <TextBlock Text="ID del artículo" />
-            <TextBox x:Name="ItemIdTextBox" />
-            <TextBlock Text="Talla" />
-            <TextBox x:Name="SizeTextBox" />
-            <TextBlock Text="Cantidad" />
-            <TextBox x:Name="QuantityTextBox" />
-            <TextBlock Text="Precio pactado" />
-            <TextBox x:Name="PriceTextBox" />
-            <Button Content="Agregar artículo" Click="AddItemButton_Click" Margin="0,12,0,0" />
-
-            <Button Content="Crear pedido" Click="CreateOrderButton_Click" Margin="0,12,0,0" />
-        </StackPanel>
-
-        <Border Grid.Row="1" Grid.Column="1" BorderBrush="Gray" BorderThickness="1" CornerRadius="8" Padding="12">
-            <StackPanel>
-                <TextBlock Text="Artículos en el pedido" FontWeight="SemiBold" Margin="0,0,0,8" />
-                <ListView x:Name="ItemsListView" Height="300">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
-                                <TextBlock Text="ID:" FontWeight="Bold" />
-                                <TextBlock Text=" {Binding SaldoID}" Width="120" />
-                                <TextBlock Text="Talla:" FontWeight="Bold" />
-                                <TextBlock Text=" {Binding Talla}" Width="80" />
-                                <TextBlock Text="Cantidad:" FontWeight="Bold" />
-                                <TextBlock Text=" {Binding Cantidad}" Width="80" />
-                                <TextBlock Text="Precio:" FontWeight="Bold" />
-                                <TextBlock Text=" {Binding PrecioPactado, StringFormat={}{0:C2}}" Width="100" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </StackPanel>
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#1a1a2e" Padding="12" CornerRadius="8" Margin="0,0,0,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="👟 ShoeManager" FontSize="22" FontWeight="Bold" Foreground="White" Grid.Column="0" />
+                <TextBlock x:Name="HeaderStatusText" Text="Sistema listo" FontSize="13" 
+                           Foreground="#a0a0c0" Grid.Column="1" VerticalAlignment="Center" Margin="20,0,0,0" />
+                <StackPanel Orientation="Horizontal" Grid.Column="2">
+                    <TextBlock x:Name="StatsText" Text="0 saldos | 0 pedidos" FontSize="12" 
+                               Foreground="#a0a0c0" VerticalAlignment="Center" Margin="0,0,16,0" />
+                    <Button x:Name="RefreshButton" Content="🔄" Width="32" Height="32" 
+                            ToolTip="Recargar datos (F5)" Click="RefreshButton_Click" />
+                </StackPanel>
+            </Grid>
         </Border>
 
-        <TextBlock x:Name="StatusTextBlock" Grid.Row="2" Grid.ColumnSpan="2" Margin="0,16,0,0" TextWrapping="Wrap" />
+        <!-- Tabs -->
+        <TabControl Grid.Row="1" x:Name="MainTabControl" SelectionChanged="TabControl_SelectionChanged">
+            <!-- TAB 1: INVENTARIO -->
+            <TabItem Header="📦 Inventario" x:Name="InventarioTab">
+                <Grid Margin="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Barra de búsqueda y acciones -->
+                    <Border Grid.Row="0" Background="#f0f0f5" Padding="8" CornerRadius="6" Margin="0,0,0,6">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="🔍" FontSize="16" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,6,0" />
+                            <TextBox x:Name="SearchTextBox" Grid.Column="1" 
+                                     TextChanged="SearchTextBox_TextChanged"
+                                     ToolTip="Buscar por Marca, Modelo o UPC" />
+                            <TextBlock Text="ej: NIKE, Air Max, STK" Grid.Column="2" 
+                                       VerticalAlignment="Center" Foreground="Gray" FontSize="11" Margin="6,0,16,0" />
+                            
+                            <StackPanel Orientation="Horizontal" Grid.Column="4">
+                                <Button Content="➕ Nuevo Saldo" Click="NuevoSaldoButton_Click" 
+                                        Width="120" Height="30" Margin="0,0,6,0" ToolTip="Ctrl+N" />
+                                <Button Content="✏️ Editar" Click="EditarSaldoButton_Click" 
+                                        Width="80" Height="30" Margin="0,0,6,0" 
+                                        IsEnabled="False" x:Name="EditarSaldoButton" />
+                                <Button Content="🗑️ Eliminar" Click="EliminarSaldoButton_Click" 
+                                        Width="80" Height="30" 
+                                        IsEnabled="False" x:Name="EliminarSaldoButton" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- DataGrid de Saldos -->
+                    <DataGrid x:Name="SaldosDataGrid" Grid.Row="2"
+                              AutoGenerateColumns="False" 
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              SelectionChanged="SaldosDataGrid_SelectionChanged"
+                              MouseDoubleClick="SaldosDataGrid_MouseDoubleClick"
+                              VirtualizingPanel.VirtualizationMode="Recycling"
+                              EnableRowVirtualization="True"
+                              AlternatingRowBackground="#f8f8fc"
+                              RowBackground="White"
+                              BorderBrush="#ddd" BorderThickness="1"
+                              FontSize="12">
+                        <DataGrid.Resources>
+                            <!-- Estilo para stock crítico (rojo) -->
+                            <Style x:Key="StockCriticoStyle" TargetType="DataGridCell">
+                                <Setter Property="Background" Value="#ffe0e0" />
+                                <Setter Property="Foreground" Value="#cc0000" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                            </Style>
+                            <Style x:Key="StockBajoStyle" TargetType="DataGridCell">
+                                <Setter Property="Background" Value="#fff3cd" />
+                                <Setter Property="Foreground" Value="#856404" />
+                            </Style>
+                            <!-- Estilo para fila inactiva (liquidada) -->
+                            <Style x:Key="FilaInactivaStyle" TargetType="DataGridRow">
+                                <Setter Property="Opacity" Value="0.6" />
+                                <Setter Property="Foreground" Value="#999" />
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding ID}" Width="160" />
+                            <DataGridTextColumn Header="UPC" Binding="{Binding UPC}" Width="120" />
+                            <DataGridTextColumn Header="Marca" Binding="{Binding Marca}" Width="120">
+                                <DataGridTextColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="ToolTip" Value="Ordenar por Marca" />
+                                    </Style>
+                                </DataGridTextColumn.HeaderStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Modelo" Binding="{Binding Modelo}" Width="140">
+                                <DataGridTextColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="ToolTip" Value="Ordenar por Modelo" />
+                                    </Style>
+                                </DataGridTextColumn.HeaderStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Precio" Binding="{Binding Precio, StringFormat={}{0:C2}}" Width="90" />
+                            <DataGridTextColumn Header="Stock Total" Binding="{Binding StockTotal}" Width="90" />
+                            <DataGridTextColumn Header="Tallas" Binding="{Binding StockPorTalla.Count}" Width="60" />
+                            <DataGridTemplateColumn Header="Estado" Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock x:Name="EstadoText" Text="{Binding EsActivo, Converter={StaticResource BoolToEstadoConverter}}" 
+                                                   FontWeight="SemiBold" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Creado" Binding="{Binding FechaCreacion, StringFormat={}{0:dd/MM/yy}}" Width="80" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- TAB 2: PEDIDOS -->
+            <TabItem Header="📋 Pedidos" x:Name="PedidosTab">
+                <Grid Margin="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Crear nuevo pedido -->
+                    <Border Grid.Row="0" Background="#f0f0f5" Padding="12" CornerRadius="6" Margin="0,0,0,6">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Crear Pedido" FontWeight="Bold" FontSize="14" 
+                                       Grid.Row="0" Grid.ColumnSpan="4" Margin="0,0,0,8" />
+
+                            <TextBlock Text="Teléfono cliente:" Grid.Row="1" Grid.Column="0" 
+                                       VerticalAlignment="Center" Margin="0,0,8,0" />
+                            <TextBox x:Name="PhoneTextBox" Grid.Row="1" Grid.Column="1" Width="180" />
+
+                            <TextBlock Text="ID Artículo:" Grid.Row="1" Grid.Column="2" 
+                                       VerticalAlignment="Center" Margin="16,0,8,0" />
+                            <TextBox x:Name="ItemIdTextBox" Grid.Row="1" Grid.Column="3" Width="120" ToolTip="ID del saldo o UPC" />
+
+                            <TextBlock Text="Talla:" Grid.Row="2" Grid.Column="0" 
+                                       VerticalAlignment="Center" Margin="0,6,8,0" />
+                            <TextBox x:Name="SizeTextBox" Grid.Row="2" Grid.Column="1" Width="80" 
+                                     Margin="0,6,0,0" HorizontalAlignment="Left" />
+
+                            <TextBlock Text="Cant:" Grid.Row="2" Grid.Column="1" 
+                                       VerticalAlignment="Center" Margin="90,6,8,0" />
+                            <TextBox x:Name="QuantityTextBox" Grid.Row="2" Grid.Column="1" Width="60" 
+                                     Margin="120,6,0,0" HorizontalAlignment="Left" />
+
+                            <TextBlock Text="Precio:" Grid.Row="2" Grid.Column="2" 
+                                       VerticalAlignment="Center" Margin="16,6,8,0" />
+                            <TextBox x:Name="PriceTextBox" Grid.Row="2" Grid.Column="3" Width="80" 
+                                     Margin="0,6,6,0" ToolTip="Precio pactado" />
+
+                            <Button Content="➕ Agregar" Grid.Row="2" Grid.Column="3" 
+                                    Click="AddItemButton_Click" Width="80" Height="26" Margin="0,6,0,0"
+                                    HorizontalAlignment="Right" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Lista de artículos del pedido actual -->
+                    <Grid Grid.Row="1" Margin="0,0,0,6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Artículos en pedido actual:" FontWeight="SemiBold" Grid.Row="0" />
+                        <ListView x:Name="ItemsListView" Grid.Row="1" Margin="0,4,0,4" BorderBrush="#ddd" BorderThickness="1">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="8" Margin="0,2" BorderBrush="#eee" BorderThickness="0,0,0,1">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding SaldoID}" FontWeight="Bold" Grid.Column="0" Width="140" />
+                                            <TextBlock Grid.Column="1">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="Talla {0}">
+                                                        <Binding Path="Talla" />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                            <TextBlock Text="{Binding Cantidad, StringFormat={}{0}x}" Grid.Column="2" Width="40" />
+                                            <TextBlock Text="{Binding PrecioPactado, StringFormat={}{0:C2}}" Grid.Column="3" Width="80" />
+                                            <TextBlock Grid.Column="4" FontWeight="Bold" Foreground="#006600">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}{0:C2}">
+                                                        <Binding Path="PrecioPactado" />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+
+                        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
+                            <TextBlock x:Name="OrderTotalText" Text="Total: S/ 0.00" FontSize="16" 
+                                       FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,12,0" />
+                            <Button Content="💾 Crear Pedido" Click="CreateOrderButton_Click" 
+                                    Width="140" Height="34" FontWeight="Bold" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <!-- TAB 3: CLIENTES -->
+            <TabItem Header="👥 Clientes" x:Name="ClientesTab">
+                <Grid Margin="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#f0f0f5" Padding="12" CornerRadius="6" Margin="0,0,0,6">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Registrar Cliente" FontWeight="Bold" FontSize="14" 
+                                       Grid.Row="0" Grid.ColumnSpan="7" Margin="0,0,0,8" />
+                            <TextBlock Text="Teléfono:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
+                            <TextBox x:Name="ClienteTelefonoTextBox" Grid.Row="1" Grid.Column="1" />
+                            <TextBlock Text="Nombre:" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="8,0,4,0" />
+                            <TextBox x:Name="ClienteNombreTextBox" Grid.Row="1" Grid.Column="3" />
+                            <TextBlock Text="Dirección:" Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" Margin="8,0,4,0" />
+                            <TextBox x:Name="ClienteDireccionTextBox" Grid.Row="1" Grid.Column="5" />
+                            <Button Content="💾 Guardar" Grid.Row="1" Grid.Column="6" Margin="8,0,0,0" 
+                                    Click="GuardarClienteButton_Click" Width="100" />
+                        </Grid>
+                    </Border>
+
+                    <DataGrid x:Name="ClientesDataGrid" Grid.Row="2"
+                              AutoGenerateColumns="False" IsReadOnly="True"
+                              AlternatingRowBackground="#f8f8fc" RowBackground="White"
+                              BorderBrush="#ddd" BorderThickness="1" FontSize="12">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Teléfono" Binding="{Binding Telefono}" Width="150" />
+                            <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="200" />
+                            <DataGridTextColumn Header="Dirección" Binding="{Binding Direccion}" Width="300" />
+                            <DataGridTextColumn Header="Preferencia Horaria" Binding="{Binding PreferenciaHoraria}" Width="150" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- TAB 4: HISTORIAL DE PEDIDOS -->
+            <TabItem Header="📜 Historial" x:Name="HistorialTab">
+                <Grid Margin="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <DataGrid x:Name="HistorialDataGrid" Grid.Row="0"
+                              AutoGenerateColumns="False" IsReadOnly="True"
+                              SelectionMode="Single"
+                              AlternatingRowBackground="#f8f8fc" RowBackground="White"
+                              BorderBrush="#ddd" BorderThickness="1" FontSize="12"
+                              SelectionChanged="HistorialDataGrid_SelectionChanged">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID Pedido" Binding="{Binding ID}" Width="150" />
+                            <DataGridTextColumn Header="Cliente" Binding="{Binding ClienteTelefono}" Width="130" />
+                            <DataGridTextColumn Header="Artículos" Binding="{Binding Items.Count}" Width="70" />
+                            <DataGridTextColumn Header="Total" Binding="{Binding MontoTotal, StringFormat={}{0:C2}}" Width="90" />
+                            <DataGridTemplateColumn Header="Estado" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border CornerRadius="4" Padding="4,2">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Estado}" Value="Entregado">
+                                                            <Setter Property="Background" Value="#d4edda" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Estado}" Value="Cancelado">
+                                                            <Setter Property="Background" Value="#f8d7da" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Estado}" Value="Enviado">
+                                                            <Setter Property="Background" Value="#cce5ff" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Estado}" Value="Creado">
+                                                            <Setter Property="Background" Value="#fff3cd" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Estado}" Value="Pendiente">
+                                                            <Setter Property="Background" Value="#e2e3e5" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <TextBlock Text="{Binding Estado}" FontWeight="SemiBold" HorizontalAlignment="Center" />
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Creado" Binding="{Binding FechaCreacion}" Width="120" />
+                            <DataGridTemplateColumn Header="Acciones" Width="200">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="▶️ En Ruta" Margin="2,0" Width="70" Height="24" FontSize="10"
+                                                    Click="CambiarEstadoPedido_Click" Tag="{Binding ID}" 
+                                                    Visibility="{Binding Estado, Converter={StaticResource EstadoToVisibilidadConverter}, 
+                                                                     ConverterParameter=Confirmado}" />
+                                            <Button Content="✅ Entregar" Margin="2,0" Width="70" Height="24" FontSize="10"
+                                                    Click="CambiarEstadoPedido_Click" Tag="{Binding ID}"
+                                                    Visibility="{Binding Estado, Converter={StaticResource EstadoToVisibilidadConverter}, 
+                                                                     ConverterParameter=Enviado}" />
+                                            <Button Content="❌ Cancelar" Margin="2,0" Width="70" Height="24" FontSize="10"
+                                                    Click="CancelarPedidoButton_Click" Tag="{Binding ID}"
+                                                    Visibility="{Binding Estado, Converter={StaticResource EstadoToVisibilidadConverter}, 
+                                                                     ConverterParameter=Cancelable}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <!-- Panel de acciones masivas -->
+                    <Border Grid.Row="1" Background="#f0f0f5" Padding="8" CornerRadius="6" Margin="0,6,0,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Content="📊 Reportes" Click="ReportesButton_Click" Width="120" Height="30" Margin="0,0,8,0"
+                                    ToolTip="Acceso a reportes financieros (Próximamente)" />
+                            <Button Content="🔗 Generar Enlace" Click="GenerarEnlaceButton_Click" Width="130" Height="30" Margin="0,0,8,0"
+                                    ToolTip="Generar enlace wa.me para el pedido seleccionado" IsEnabled="False" x:Name="GenerarEnlaceButton" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- TAB 5: SINCRONIZACIÓN -->
+            <TabItem Header="🔄 Sincronización" x:Name="SincronizacionTab" IsEnabled="False">
+                <Grid Margin="4">
+                    <TextBlock Text="Módulo de sincronización USB (Fase 5 - Próximamente)" 
+                               HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Foreground="Gray" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <!-- Barra de estado inferior -->
+        <Border Grid.Row="2" Background="#1a1a2e" Padding="8" CornerRadius="6" Margin="0,6,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="StatusTextBlock" Text="✅ Sistema listo" Foreground="#a0ffa0" Grid.Column="0" />
+                <TextBlock Text="" Grid.Column="1" />
+                <TextBlock x:Name="TeclasText" Text="Ctrl+N: Nuevo | Ctrl+F: Buscar | Ctrl+S: Guardar" 
+                           Foreground="#666" FontSize="10" Grid.Column="2" />
+                <TextBlock x:Name="DataFileText" Text="" Foreground="#666" FontSize="10" Grid.Column="3" Margin="16,0,0,0" />
+            </Grid>
+        </Border>
     </Grid>
+
+    <Window.Resources>
+        <local:BoolToEstadoConverter x:Key="BoolToEstadoConverter" />
+        <local:ItemTotalConverter x:Key="ItemTotalConverter" />
+        <local:EstadoToVisibilidadConverter x:Key="EstadoToVisibilidadConverter" />
+    </Window.Resources>
 </Window>

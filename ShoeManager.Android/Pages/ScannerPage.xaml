@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ShoeManager.Android.Pages.ScannerPage"
+             Title="Escanear UPC-A">
+    <VerticalStackLayout Padding="20" Spacing="16" VerticalOptions="Center">
+        <Label Text="Escáner de Código de Barras" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
+        <Frame Padding="20" BorderColor="LightGray" CornerRadius="10" BackgroundColor="#f8f8f8" HeightRequest="200">
+            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
+                <Label x:Name="ScanResultLabel" Text="Apunta la cámara al código UPC-A" FontSize="14" HorizontalOptions="Center" />
+                <Button x:Name="ScanButton" Text="📷 Escanear" Clicked="OnScanClicked" 
+                        FontSize="18" HeightRequest="60" WidthRequest="200" />
+            </VerticalStackLayout>
+        </Frame>
+        <Entry x:Name="ManualUPCEntry" Placeholder="O ingresa el UPC manualmente" Keyboard="Numeric" />
+        <Button Text="✅ Usar este código" Clicked="OnUseCodeClicked" BackgroundColor="#4CAF50" TextColor="White" />
+        <Button Text="🔙 Volver" Clicked="OnBackClicked" BackgroundColor="#f44336" TextColor="White" />
+    </VerticalStackLayout>
+</ContentPage>

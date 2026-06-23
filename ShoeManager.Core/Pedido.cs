@@ -28,6 +28,12 @@ namespace ShoeManager.Core {
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
         public DateTime FechaModificacion { get; set; } = DateTime.Now;
 
+        /// <summary>
+        /// Indica si el pedido tiene sus datos congelados (estado "En Ruta" o superior).
+        /// Cuando está congelado, no se pueden modificar precios, modelos ni cantidades.
+        /// </summary>
+        public bool DatosCongelados => Estado == EstadosPedido.Enviado || Estado == EstadosPedido.Entregado || Estado == EstadosPedido.Cancelado;
+
         public Pedido() {
             Estado = EstadosPedido.Pendiente;
             HistorialEstados = new List<string> { Estado };
@@ -65,6 +71,15 @@ namespace ShoeManager.Core {
             }
             MontoTotal = Items.Sum(i => i.PrecioPactado * i.Cantidad);
             FechaModificacion = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Valida que los datos del pedido no estén congelados antes de modificarlos.
+        /// Llamar antes de cualquier modificación de Items, precios o cantidades.
+        /// </summary>
+        public void ValidarNoCongelado() {
+            if (DatosCongelados)
+                throw new InvalidOperationException($"No se puede modificar el pedido {ID}: los datos están congelados (estado: {Estado})");
         }
 
         public void CambiarEstado(string nuevoEstado) {

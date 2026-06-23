@@ -1,0 +1,45 @@
+<Window x:Class="ShoeManager.Windows.ReportesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ShoeManager.Windows"
+        mc:Ignorable="d"
+        Title="Reportes Financieros" 
+        Height="500" Width="700"
+        WindowStartupLocation="CenterOwner">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="📊 Reportes Financieros" FontSize="20" FontWeight="Bold" Grid.Row="0" Margin="0,0,0,16" />
+
+        <Border Grid.Row="1" Background="#fff3cd" Padding="12" CornerRadius="6" Margin="0,0,0,12">
+            <TextBlock Text="⏳ Módulo en desarrollo. Los reportes detallados estarán disponibles en la Fase 5 (Sprint 5 del Plan de Implementación)." 
+                       TextWrapping="Wrap" Foreground="#856404" />
+        </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Reportes planeados:" FontWeight="Bold" FontSize="14" />
+                <TextBlock Text="📆 Reporte de Caja Diario" />
+                <TextBlock Text="💰 Ingresos Acumulados por Período" />
+                <TextBlock Text="📈 Velocidad de Venta por Producto" />
+                <TextBlock Text="📋 Tasa de Rechazo de Pedidos" />
+                <TextBlock Text="🏷️ Saldos Liquidados vs Activos" />
+            </StackPanel>
+
+            <Button Grid.Row="1" Content="Cerrar" Width="100" Height="32" 
+                    HorizontalAlignment="Right" Click="CerrarButton_Click" />
+        </Grid>
+    </Grid>
+</Window>
