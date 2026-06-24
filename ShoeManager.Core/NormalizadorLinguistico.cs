@@ -43,7 +43,7 @@ namespace ShoeManager.Core
             resultado = Regex.Replace(resultado, @"[\u1F00-\u1FFF\u2600-\u27BF\uD800-\uDBFF\uDC00-\uDFFF]", "");
 
             // Remover símbolos no alfanuméricos (mantener letras, números, espacios, /, -, ., #)
-            resultado = Regex.Replace(resultado, @"[^A-Z0-9\s\/\.\#\-\+\_\(\)\,]", " ");
+            resultado = Regex.Replace(resultado, @"[^A-Z0-9\s\/\.#\-+_(),]", " ");
 
             // Unificar espacios
             resultado = Regex.Replace(resultado, @"\s+", " ").Trim();
